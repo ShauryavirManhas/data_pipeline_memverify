@@ -1,0 +1,9 @@
+{
+  "id": "mock-mean-002",
+  "repo": "mock-mean",
+  "issue_text": "mean([1.0, 2.0]) returns 1.0 instead of 1.5. The arithmetic mean is the sum of the values divided by how many there are, and the result should keep the fractional part. An empty sequence should raise ValueError. That empty-input check already behaves correctly.",
+  "base_commit": "668c7c9ffdd98418abf7d0faec533c958aa8baf0",
+  "created_at": "2024-07-01T00:00:00+00:00",
+  "workdir": "repo",
+  "docker_image": null
+}

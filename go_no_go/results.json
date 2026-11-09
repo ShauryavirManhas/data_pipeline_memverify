@@ -1,0 +1,338 @@
+{
+  "dataset": "SWE-bench-Live/SWE-bench-Live",
+  "split": "lite",
+  "backend": "modal",
+  "host": "Shauryavirs-MacBook-Pro.local",
+  "platform": "Darwin arm64",
+  "started_at": "2026-11-09T04:18:02+00:00",
+  "tasks": [
+    {
+      "instance_id": "conan-io__conan-17092",
+      "repo": "conan-io/conan",
+      "image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17092:latest",
+      "created_at": "2024-10-01T12:20:09+00:00",
+      "probe": {
+        "seconds": 3.1,
+        "pull_seconds": 0.2,
+        "where": "modal (env: image)",
+        "testbed": "yes",
+        "toplevel": "/testbed",
+        "head": "f31647f3ef2feaabc91b2875d540ae48d2a4a4c8",
+        "shallow": "false",
+        "commits": "8556",
+        "remotes": "origin",
+        "dirty": "2",
+        "next_present": "yes",
+        "python": "Python 3.6.15",
+        "python_path": "/usr/local/bin/python",
+        "git": "git version 2.30.2",
+        "bash": "GNU bash, version 5.1.4(1)-release (x86_64-pc-linux-gnu)",
+        "ls": ".ci .editorconfig .git .github .gitignore .pytest_cache LICENSE.md MANIFEST.in README.md conan conan.egg-info conans contributors.txt pyinstaller.py pyproject.toml pytest.ini setup.cfg setup.py setup_server.py test"
+      },
+      "gold": {
+        "resolved": true,
+        "seconds": 663.8,
+        "tests_ran": true,
+        "patch_applied": true,
+        "timed_out": false,
+        "seconds_pull": 0.12,
+        "seconds_run": 663.36,
+        "where": "modal (env: image)",
+        "log_path": "go_no_go/logs/gold/conan-io__conan-17092/test_output.txt",
+        "FAIL_TO_PASS": {
+          "success": 6,
+          "failure": 0
+        },
+        "PASS_TO_PASS": {
+          "success": 4032,
+          "failure": 0
+        }
+      },
+      "empty": {
+        "resolved": false,
+        "seconds": 611.9,
+        "tests_ran": true,
+        "patch_applied": true,
+        "timed_out": false,
+        "seconds_pull": 0.12,
+        "seconds_run": 611.35,
+        "where": "modal (env: image)",
+        "log_path": "go_no_go/logs/empty/conan-io__conan-17092/test_output.txt",
+        "FAIL_TO_PASS": {
+          "success": 0,
+          "failure": 6
+        },
+        "PASS_TO_PASS": {
+          "success": 4032,
+          "failure": 0
+        }
+      },
+      "gold_ok": true,
+      "empty_ok": true,
+      "ok": true
+    },
+    {
+      "instance_id": "aws-cloudformation__cfn-lint-3749",
+      "repo": "aws-cloudformation/cfn-lint",
+      "image": "starryzhang/sweb.eval.x86_64.aws-cloudformation_1776_cfn-lint-3749:latest",
+      "created_at": "2024-10-15T20:46:50+00:00",
+      "probe": {
+        "seconds": 37.2,
+        "pull_seconds": 34.4,
+        "where": "modal (env: image)",
+        "testbed": "yes",
+        "toplevel": "/testbed",
+        "head": "07652d4a4133e825aeeb09973398575b25713c82",
+        "shallow": "false",
+        "commits": "2846",
+        "remotes": "origin",
+        "dirty": "0",
+        "next_present": "yes",
+        "python": "Python 3.8.20",
+        "python_path": "/usr/local/bin/python",
+        "git": "git version 2.39.5",
+        "bash": "GNU bash, version 5.2.15(1)-release (x86_64-pc-linux-gnu)",
+        "ls": ".git .git-blame-ignore-revs .github .gitignore .pre-commit-config.yaml .pre-commit-hooks.yaml .pytest_cache CHANGELOG.md CODE_OF_CONDUCT.md CONTRIBUTING.md Dockerfile LICENSE MANIFEST.in NOTICE README.md custom_rules.txt docs examples logo logo.png"
+      },
+      "gold": {
+        "resolved": true,
+        "seconds": 73.8,
+        "tests_ran": true,
+        "patch_applied": true,
+        "timed_out": false,
+        "seconds_pull": 0.24,
+        "seconds_run": 73.2,
+        "where": "modal (env: image)",
+        "log_path": "go_no_go/logs/gold/aws-cloudformation__cfn-lint-3749/test_output.txt",
+        "FAIL_TO_PASS": {
+          "success": 3,
+          "failure": 0
+        },
+        "PASS_TO_PASS": {
+          "success": 1223,
+          "failure": 0
+        }
+      },
+      "empty": {
+        "resolved": false,
+        "seconds": 72.0,
+        "tests_ran": true,
+        "patch_applied": true,
+        "timed_out": false,
+        "seconds_pull": 0.16,
+        "seconds_run": 71.66,
+        "where": "modal (env: image)",
+        "log_path": "go_no_go/logs/empty/aws-cloudformation__cfn-lint-3749/test_output.txt",
+        "FAIL_TO_PASS": {
+          "success": 0,
+          "failure": 3
+        },
+        "PASS_TO_PASS": {
+          "success": 1223,
+          "failure": 0
+        }
+      },
+      "gold_ok": true,
+      "empty_ok": true,
+      "ok": true
+    },
+    {
+      "instance_id": "deepset-ai__haystack-8489",
+      "repo": "deepset-ai/haystack",
+      "image": "starryzhang/sweb.eval.x86_64.deepset-ai_1776_haystack-8489:latest",
+      "created_at": "2024-10-24T04:16:29+00:00",
+      "probe": {
+        "seconds": 132.8,
+        "pull_seconds": 129.8,
+        "where": "modal (env: image)",
+        "testbed": "yes",
+        "toplevel": "/testbed",
+        "head": "906177329bcc54f6946af361fcd3d0e334e6ce5f",
+        "shallow": "false",
+        "commits": "3703",
+        "remotes": "origin",
+        "dirty": "0",
+        "next_present": "yes",
+        "python": "Python 3.8.20",
+        "python_path": "/usr/local/bin/python",
+        "git": "git version 2.39.5",
+        "bash": "GNU bash, version 5.2.15(1)-release (x86_64-pc-linux-gnu)",
+        "ls": ".coverage .git .github .gitignore .pre-commit-config.yaml .pytest_cache CITATION.cff CONTRIBUTING.md LICENSE README.md SECURITY.md VERSION.txt code_of_conduct.txt coverage.xml docker docs e2e examples haystack license-header.txt"
+      },
+      "gold": {
+        "resolved": true,
+        "seconds": 44.4,
+        "tests_ran": true,
+        "patch_applied": true,
+        "timed_out": false,
+        "seconds_pull": 0.1,
+        "seconds_run": 44.09,
+        "where": "modal (env: image)",
+        "log_path": "go_no_go/logs/gold/deepset-ai__haystack-8489/test_output.txt",
+        "FAIL_TO_PASS": {
+          "success": 4,
+          "failure": 0
+        },
+        "PASS_TO_PASS": {
+          "success": 1547,
+          "failure": 0
+        }
+      },
+      "empty": {
+        "resolved": false,
+        "seconds": 57.9,
+        "tests_ran": true,
+        "patch_applied": true,
+        "timed_out": false,
+        "seconds_pull": 0.25,
+        "seconds_run": 57.41,
+        "where": "modal (env: image)",
+        "log_path": "go_no_go/logs/empty/deepset-ai__haystack-8489/test_output.txt",
+        "FAIL_TO_PASS": {
+          "success": 0,
+          "failure": 4
+        },
+        "PASS_TO_PASS": {
+          "success": 1547,
+          "failure": 0
+        }
+      },
+      "gold_ok": true,
+      "empty_ok": true,
+      "ok": true
+    },
+    {
+      "instance_id": "matplotlib__matplotlib-28933",
+      "repo": "matplotlib/matplotlib",
+      "image": "starryzhang/sweb.eval.x86_64.matplotlib_1776_matplotlib-28933:latest",
+      "created_at": "2024-10-03T11:45:38+00:00",
+      "probe": {
+        "seconds": 60.8,
+        "pull_seconds": 57.1,
+        "where": "modal (env: image)",
+        "testbed": "yes",
+        "toplevel": "/testbed",
+        "head": "cf84d9a6410dec07f57916905c9f54bf00d22b2e",
+        "shallow": "false",
+        "commits": "51126",
+        "remotes": "origin",
+        "dirty": "1",
+        "next_present": "yes",
+        "python": "Python 3.10.17",
+        "python_path": "/usr/local/bin/python",
+        "git": "git version 2.39.5",
+        "bash": "GNU bash, version 5.2.15(1)-release (x86_64-pc-linux-gnu)",
+        "ls": ".appveyor.yml .circleci .coveragerc .devcontainer .flake8 .git .git-blame-ignore-revs .git_archival.txt .gitattributes .github .gitignore .mailmap .matplotlib-repo .meeseeksdev.yml .pre-commit-config.yaml .pytest_cache .yamllint.yml CITATION.bib CITATION.cff CODE_OF_CONDUCT.md"
+      },
+      "gold": {
+        "resolved": true,
+        "seconds": 303.4,
+        "tests_ran": true,
+        "patch_applied": true,
+        "timed_out": false,
+        "seconds_pull": 0.16,
+        "seconds_run": 302.61,
+        "where": "modal (env: image)",
+        "log_path": "go_no_go/logs/gold/matplotlib__matplotlib-28933/test_output.txt",
+        "FAIL_TO_PASS": {
+          "success": 1,
+          "failure": 0
+        },
+        "PASS_TO_PASS": {
+          "success": 8227,
+          "failure": 0
+        }
+      },
+      "empty": {
+        "resolved": false,
+        "seconds": 408.1,
+        "tests_ran": true,
+        "patch_applied": true,
+        "timed_out": false,
+        "seconds_pull": 0.14,
+        "seconds_run": 407.67,
+        "where": "modal (env: image)",
+        "log_path": "go_no_go/logs/empty/matplotlib__matplotlib-28933/test_output.txt",
+        "FAIL_TO_PASS": {
+          "success": 0,
+          "failure": 1
+        },
+        "PASS_TO_PASS": {
+          "success": 8227,
+          "failure": 0
+        }
+      },
+      "gold_ok": true,
+      "empty_ok": true,
+      "ok": true
+    },
+    {
+      "instance_id": "reflex-dev__reflex-4087",
+      "repo": "reflex-dev/reflex",
+      "image": "starryzhang/sweb.eval.x86_64.reflex-dev_1776_reflex-4087:latest",
+      "created_at": "2024-10-07T21:01:42+00:00",
+      "probe": {
+        "seconds": 43.2,
+        "pull_seconds": 40.3,
+        "where": "modal (env: image)",
+        "testbed": "yes",
+        "toplevel": "/testbed",
+        "head": "bec73109d60c08f0e27d407858f8048b2d5c354c",
+        "shallow": "false",
+        "commits": "1779",
+        "remotes": "origin",
+        "dirty": "0",
+        "next_present": "yes",
+        "python": "Python 3.9.22",
+        "python_path": "/usr/local/bin/python",
+        "git": "git version 2.39.5",
+        "bash": "GNU bash, version 5.2.15(1)-release (x86_64-pc-linux-gnu)",
+        "ls": ".benchmarks .coveragerc .devcontainer .git .github .gitignore .pre-commit-config.yaml .pytest_cache .web CODE_OF_CONDUCT.md CONTRIBUTING.md LICENSE README.md SECURITY.md assets benchmarks docker-example docs poetry.lock pyproject.toml"
+      },
+      "gold": {
+        "resolved": true,
+        "seconds": 120.2,
+        "tests_ran": true,
+        "patch_applied": true,
+        "timed_out": false,
+        "seconds_pull": 0.11,
+        "seconds_run": 119.87,
+        "where": "modal (env: image)",
+        "log_path": "go_no_go/logs/gold/reflex-dev__reflex-4087/test_output.txt",
+        "FAIL_TO_PASS": {
+          "success": 1,
+          "failure": 0
+        },
+        "PASS_TO_PASS": {
+          "success": 2624,
+          "failure": 0
+        }
+      },
+      "empty": {
+        "resolved": false,
+        "seconds": 95.6,
+        "tests_ran": true,
+        "patch_applied": true,
+        "timed_out": false,
+        "seconds_pull": 0.19,
+        "seconds_run": 95.18,
+        "where": "modal (env: image)",
+        "log_path": "go_no_go/logs/empty/reflex-dev__reflex-4087/test_output.txt",
+        "FAIL_TO_PASS": {
+          "success": 0,
+          "failure": 1
+        },
+        "PASS_TO_PASS": {
+          "success": 2624,
+          "failure": 0
+        }
+      },
+      "gold_ok": true,
+      "empty_ok": true,
+      "ok": true
+    }
+  ],
+  "n_ok": 5,
+  "decision": "GO",
+  "finished_at": "2026-11-09T05:03:30+00:00"
+}

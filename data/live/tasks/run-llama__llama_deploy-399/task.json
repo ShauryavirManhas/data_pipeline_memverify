@@ -1,0 +1,9 @@
+{
+  "id": "run-llama__llama_deploy-399",
+  "repo": "run-llama/llama_deploy",
+  "issue_text": "Add environment variables to deployment definition\nAt the moment the only way to pass env vars to a running instance of Llama Deploy is through setting them before starting the process, which is not practical in case of a remote installation or docker containers.\r\n\r\nWe should add the option to declare the environment variables needed by each service like this:\r\n```yaml\r\nservices:\r\n  test-workflow:\r\n    name: Test Workflow\r\n    env:\r\n        OPENAI_API_KEY: \"secret!\"\r\n    source:\r\n      type: git\r\n      name: https://github.com/run-llama/llama_deploy.git\r\n    path: tests/apiserver/data/workflow:my_workflow\r\n```\r\nthen the Control plane would propagate the env var when spinning up the service.\n",
+  "base_commit": "28d57468c36f224bc6e50dc7922f128498f3b58c",
+  "created_at": "2024-12-11T18:43:37+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.run-llama_1776_llama_deploy-399"
+}

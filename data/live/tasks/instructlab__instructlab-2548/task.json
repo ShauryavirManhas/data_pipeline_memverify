@@ -1,0 +1,9 @@
+{
+  "id": "instructlab__instructlab-2548",
+  "repo": "instructlab/instructlab",
+  "issue_text": "Accelerated train without high fidelity exits without doing anything\n**Describe the bug**\r\nIf you run training with:\r\n\r\n        result = cli_runner.invoke(\r\n            lab.ilab,\r\n            [\r\n                \"--config=DEFAULT\",\r\n                \"model\",\r\n                \"train\",\r\n                \"--pipeline\",\r\n                \"accelerated\",\r\n                \"--strategy\",\r\n                \"lab-multiphase\",\r\n                \"--phased-phase1-data\",\r\n                \"knowledge_data_path\",\r\n                \"--phased-phase2-data\",\r\n                \"skills_data_path\",\r\n                \"--phased-phase1-num-epochs\",\r\n                \"1\",\r\n                \"--phased-phase2-num-epochs\",\r\n                \"1\",\r\n                \"--skip-user-confirm\",\r\n            ],\r\n        )\r\n\r\nit will return a 0 exit code and do nothing with device=cpu.  There needs to be an else in train.py to handle when 0 conditions were hit.\r\n\r\n**Expected behavior**\r\nA message should be printed stating the requested configuration can't be executed with a non zero exit code.\r\n\n",
+  "base_commit": "cbd5be02c6694252263fc627a3078db8693a4f38",
+  "created_at": "2024-10-28T20:52:50+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.instructlab_1776_instructlab-2548@sha256:8f967d2c003fb8ab5bcd5834e9354769ad81226f538b4d91f62cd71a5e0894a3"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "reflex-dev__reflex-4720",
+  "repo": "reflex-dev/reflex",
+  "issue_text": "Hot reload results in multiple websocket connections\n**Describe the bug**\r\nSomething about how the nextjs hot reload injects changes into the running app causes websockets to leak when updates are applied quickly.\r\n\r\n**To Reproduce**\r\n1. Create a blank app and add some stateful component to enable the websocket.\r\n2. `reflex run` the app in dev mode.\r\n3. Open http://localhost:3000 in browser.\r\n4. Make several changes back to back saving each time.\r\n\r\n```python\r\nimport reflex as rx\r\n\r\ndef index() -> rx.Component:\r\n    return rx.container(\r\n        rx.vstack(\r\n            rx.text(rx.State.router.page.full_path),\r\n            rx.text(rx.State.router.session.session_id),\r\n            rx.text(rx.State.router.session.client_token),\r\n        ),\r\n    )\r\n\r\n\r\napp = rx.App()\r\napp.add_page(index)\r\n```\r\n\r\n**Expected behavior**\r\nExpect that afterwards, only a single websocket connection to `/_event` is open.\r\n\r\nActually there are many websocket connections open for the tab, but only one seems to actually be active. The others are just hanging around, wasting resources.\r\n\r\nThankfully this doesn't seem to affect prod mode, because there is no hot-reload in prod.\r\n\r\n**Screenshots**\r\n![image](https://github.com/user-attachments/assets/00d040fd-ae16-4516-a25e-d3351b6c25e6)\r\n\r\nWhy are there 3 open connections to `/_event`?????\r\n\r\n**Specifics (please complete the following information):**\r\n - Python Version: 3.12\r\n - Reflex Version: 0.6.7\r\n - OS: macOS\r\n\n",
+  "base_commit": "3cb44431288dd143bed6ba67e9b13afc2cde1aa9",
+  "created_at": "2025-01-30T20:09:41+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.reflex-dev_1776_reflex-4720@sha256:651eae0d1e36d2d927618a4dca6b9ba24632ba85f8a9114599d0904f37c895fc"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "run-llama__llama_deploy-397",
+  "repo": "run-llama/llama_deploy",
+  "issue_text": "Make the topic configurable for RabbitMQMessageQueue\n\nllama_deploy[rabbitmq] v 0.3.5 deploy_workflow not consume queue\nHi\r\n\r\nI got a problem that when run deploy workflow, the service not consume queue\r\n\r\nWhen I push message by call api, the message request not forward to queue for workflow to handle\r\n\r\n![IMG_7390](https://github.com/user-attachments/assets/3cfbfea4-154f-47e8-8cdb-00db0b8f9e5d)\r\n\r\n![IMG_7391](https://github.com/user-attachments/assets/ee867ecc-d49f-4de5-8fcc-5068fab2eeb2)\r\n\n",
+  "base_commit": "4d0945c238e96551a06a7a8382e5792cb95afa2a",
+  "created_at": "2024-12-06T16:34:54+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.run-llama_1776_llama_deploy-397"
+}

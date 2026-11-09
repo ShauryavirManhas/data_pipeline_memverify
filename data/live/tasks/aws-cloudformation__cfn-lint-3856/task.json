@@ -1,0 +1,9 @@
+{
+  "id": "aws-cloudformation__cfn-lint-3856",
+  "repo": "aws-cloudformation/cfn-lint",
+  "issue_text": "cfn-lint incorrectly issues `E1011` (`FindInMap` validation of configuration) with `!Sub` referencing `AWS::AccountId`\n### CloudFormation Lint Version\n\n1.20.1\n\n### What operating system are you using?\n\nMac\n\n### Describe the bug\n\ncfn-lint incorrectly issues `E1011` (`FindInMap` validation of configuration) with `!Sub` referencing `AWS::AccountId`.\r\n\r\n```\r\n$ cfn-lint --format pretty --regions us-east-2 --include-checks I --configure-rule E3012:strict=True I3042:region=True I3042:accountId=True -- template.yaml\r\n\r\ntemplate.yaml\r\n16:11:              E1011     '123456789012AccountBucketName' is not one of ['234567890123AccountBucketName'] for mapping 'BucketMap' and key 'BucketGroup'\r\n\r\nCfn-lint scanned 1 templates against 234 rules and found 1 errors, 0 warnings, and 0 informational violations\r\n```\n\n### Expected behavior\n\n`E1011` is not issued for the reproduction template\n\n### Reproduction template\n\n```yaml\r\n%YAML 1.2\r\n---\r\nAWSTemplateFormatVersion: 2010-09-09\r\nMappings:\r\n  BucketMap:\r\n    BucketGroup:\r\n      234567890123AccountBucketName: Bucket\r\nTransform: AWS::LanguageExtensions\r\nResources:\r\n  Resource:\r\n    Type: AWS::S3::Bucket\r\n    Properties:\r\n      BucketName: !FindInMap\r\n        - BucketMap\r\n        - BucketGroup\r\n        - !Sub ${AWS::AccountId}AccountBucketName\r\n```\n",
+  "base_commit": "19192ef6a075bab14d6af4a73c295711a7db9b0e",
+  "created_at": "2024-12-05T22:07:53+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.aws-cloudformation_1776_cfn-lint-3856@sha256:2b42dd2bc85658bfbc874560c3978d22349e038e174c5501b7998e56e3e627e5"
+}

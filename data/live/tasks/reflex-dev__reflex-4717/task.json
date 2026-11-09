@@ -1,0 +1,9 @@
+{
+  "id": "reflex-dev__reflex-4717",
+  "repo": "reflex-dev/reflex",
+  "issue_text": "LiteralEventChainVar doesn't include appropriate hooks\n**Describe the bug**\r\nA `LiteralEventChainVar` should include `var_data` that adds the hook for `addEvents` (or whatever the `invocation` is).\r\n\r\n`EventChain.create` should accept arbitrary kwargs to pass to the `EventChain` constructor.\r\n\r\n`rx.Var.create` throws away passed `_var_data` for non-str values\r\n\r\n**Specifics (please complete the following information):**\r\n - Python Version: 3.12.8\r\n - Reflex Version: 0.6.8a1\r\n - OS: macOS\r\n\n",
+  "base_commit": "2c3257d4ea1bae113a0b2338e2b7763189287206",
+  "created_at": "2025-01-29T22:37:15+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.reflex-dev_1776_reflex-4717@sha256:6c08b6f2e244d9ed00e3a6495d9180be8f49234e64f6169a571f87f501887712"
+}

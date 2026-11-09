@@ -1,0 +1,9 @@
+{
+  "id": "aws-cloudformation__cfn-lint-3798",
+  "repo": "aws-cloudformation/cfn-lint",
+  "issue_text": "Enhance E1011 Message ( is too long)\n### Is this feature request related to a new rule or cfn-lint capabilities?\n\nrules\n\n### Describe the feature you'd like to request\n\nFn::FindInMap, When the nested level depth is greater than 2 , error E1011 is thrown with a message xxx is too long (3). \r\nSample:\r\nMappings:\r\n  MyCustomMap\r\n     Level1:\r\n        Level2:\r\n           \"key\":\"value\"\r\n\r\nError message when cfn-lint is run\r\nE1011  ['MyCustomMap',  'Level1',  'Level2',' Key'] is too long (3)\r\nE3024 ['MyCustomMap', 'Level1',  'Level2', 'Key'] is too long (3)\n\n### Describe the solution you'd like\n\nCan the message be improved, to say \"FindInMap only supports up to two levels of nesting for map lookups\"\n\n### Additional context\n\n_No response_\n\n### Is this something that you'd be interested in working on?\n\n- [ ] \ud83d\udc4b I may be able to implement this feature request\n\n### Would this feature include a breaking change?\n\n- [ ] \u26a0\ufe0f This feature might incur a breaking change\n",
+  "base_commit": "d5c3da9efaa4bbd1d24fa768752df3da343b1d33",
+  "created_at": "2024-10-28T22:14:55+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.aws-cloudformation_1776_cfn-lint-3798@sha256:156f57af2f40fd10e82178f26a7cd9ee22f1da3101884ffca59d840249b95f41"
+}

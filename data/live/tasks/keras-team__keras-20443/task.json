@@ -1,0 +1,9 @@
+{
+  "id": "keras-team__keras-20443",
+  "repo": "keras-team/keras",
+  "issue_text": "UnicodeEncodeError when running keras.model.predict\nThe following problem occurs in keras version 3.1.1 (tensorflow version 2.16.1)\r\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 19-38: character maps to <undefined>\r\n\r\nprediction = trained_nn_model.predict(last_sequence)\r\nA bit more details:\r\n  File \"...\\lib\\site-packages\\keras\\src\\utils\\traceback_utils.py\", line 122, in error_handler\r\n    raise e.with_traceback(filtered_tb) from None\r\n  File \"...\\.pyenv\\pyenv-win\\versions\\3.10.5\\lib\\encodings\\cp1252.py\", line 20, in encode\r\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\r\nUnicodeEncodeError: 'charmap' codec can't encode characters in position 19-38: character maps to <undefined>\r\n\r\n(The positions varies when tried with different test data).\r\nThe code works ok with keras version 2.15.0 (tensorflow 2.15.0)\n",
+  "base_commit": "f9ea1a013c29e24001dc6cb7b10d9f740545fe58",
+  "created_at": "2024-11-03T10:05:13+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.keras-team_1776_keras-20443"
+}

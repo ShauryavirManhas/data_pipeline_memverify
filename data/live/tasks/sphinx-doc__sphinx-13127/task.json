@@ -1,0 +1,9 @@
+{
+  "id": "sphinx-doc__sphinx-13127",
+  "repo": "sphinx-doc/sphinx",
+  "issue_text": "Support `linkcheck_ignore` in link redirection\n**Is your feature request related to a problem? Please describe.**\r\nSpecifying a domain in `linkcheck_ignore` works well for links containing this domain but it doesnn't for links which redirect to a link to the domain to be ignored.\r\nFor example, the following configuration:\r\n```python\r\nlinkcheck_ignore = [\r\n    \"https://onlinelibrary.wiley.com\",  # 403 Client Error: Forbidden for url\r\n]\r\n```\r\nworks perfectly for links like `https://onlinelibrary.wiley.com/doi/10.1002/jemt.20597` but not for `https://doi.org/10.1002/jemt.20597`, which redirect to `https://onlinelibrary.wiley.com/doi/10.1002/jemt.20597`\r\n\r\n**Describe the solution you'd like**\r\nThe `linkcheck_ignore` configuration parameters should also apply to redirect links.\r\n\r\n**Additional context**\r\nSee for example https://github.com/hyperspy/hyperspy/pull/3108. This typically happen for DOI links, which are by design permanent url and redirect to urls which can changed. In this case, the DOI should be used in favour of the redirect url however, the `linkcheck_ignore` will not be effective on the redirect url.\r\n\n",
+  "base_commit": "e17ed74fe027eb84aaf72ce92c4b1bd8ebf8c049",
+  "created_at": "2024-11-13T01:57:50+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.sphinx-doc_1776_sphinx-13127"
+}

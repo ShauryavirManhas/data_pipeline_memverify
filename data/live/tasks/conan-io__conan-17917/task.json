@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17917",
+  "repo": "conan-io/conan",
+  "issue_text": "[question] Is cmake_set_interface_link_directories needed?\n### What is your question?\n\nHi, I was investigating the reason for warnings during build after switching to conan2.\r\nhttps://github.com/conan-io/conan-center-index/issues/22688\r\n\r\nI've found out that conan2 always adds library directories to interface (INTERFACE_LINK_DIRECTORIES) in CMakeDeps. So \"cmake_set_interface_link_directories\" doesn't really control anything. Is it expected? Should this property be removed?\n\n### Have you read the CONTRIBUTING guide?\n\n- [X] I've read the CONTRIBUTING guide\n",
+  "base_commit": "3678ee1976d6a33af17462ddd0be2a8921077c8e",
+  "created_at": "2025-03-09T22:32:52+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17917"
+}

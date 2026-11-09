@@ -1,0 +1,9 @@
+{
+  "id": "instructlab__instructlab-2540",
+  "repo": "instructlab/instructlab",
+  "issue_text": "`ilab chat` should allow the user to set the temperature\n**Is your feature request related to a problem? Please describe.**\r\nCurrently ilab chat does not allow for an easy way to set the temperature.\r\n\r\n**Describe the solution you'd like**\r\nI would like for the config.yaml to have a default temperature setting of .5 or .6 or whatever to use as a default but allow the user to set their own value. I would also suggest adding a --temperature flag to the ilab chat so the user can set it on a case by case basis.\r\n\r\n**Additional context**\r\nI think allowing users to change the temperature value will provide better results when looking for more deterministic and accurate responses.\r\n\n",
+  "base_commit": "bcf450d0eb712309fa22fd23073ddfba51d575e8",
+  "created_at": "2024-10-25T21:01:34+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.instructlab_1776_instructlab-2540"
+}

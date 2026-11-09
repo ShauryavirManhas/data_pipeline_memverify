@@ -1,0 +1,9 @@
+{
+  "id": "pydata__xarray-9971",
+  "repo": "pydata/xarray",
+  "issue_text": "dask-expr got merged into dask\n### What is your issue?\n\nSince v2.0.0, dask-expr is merged into the main dask package: https://github.com/dask/dask-expr/blob/v2.0/dask_expr/__init__.py\n\nxarray still pulls in dask-expr in various environments for CI: https://github.com/search?q=repo%3Apydata%2Fxarray%20dask-expr&type=code\n",
+  "base_commit": "4ccb048d10390bafbefc23215322c803c71438be",
+  "created_at": "2025-01-22T08:02:39+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.pydata_1776_xarray-9971"
+}

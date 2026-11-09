@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17302",
+  "repo": "conan-io/conan",
+  "issue_text": "[feature] CMakeDeps: Support arbitratry component strings\n### What is your suggestion?\n\nThe experimental check_components_exist property (https://docs.conan.io/2/reference/tools/cmake/cmakedeps.html#check-components-exist) expects the components to be independent libraries.\r\n\r\nBut there is at least one well known pre-existing example in which the components are just custom strings: https://cmake.org/cmake/help/latest/module/FindCURL.html. curl itself has this information in the pkg-config file (https://github.com/curl/curl/blob/master/libcurl.pc.in#L32) (`pkg-config --variable supported_features libcurl`), and it actually pre-dates even pkg-config by being in curl-config (https://github.com/curl/curl/blob/master/curl-config.in#L44).\r\n\r\nIdeally CMakeDeps would allow also such custom strings as components.\r\n\n\n### Have you read the CONTRIBUTING guide?\n\n- [ ] I've read the CONTRIBUTING guide\n",
+  "base_commit": "6c620e8ef8e2222f2e3c2d9cadb90b1527d4045a",
+  "created_at": "2024-11-12T00:38:31+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17302"
+}

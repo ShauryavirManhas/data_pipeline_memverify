@@ -1,0 +1,9 @@
+{
+  "id": "matplotlib__matplotlib-29258",
+  "repo": "matplotlib/matplotlib",
+  "issue_text": "[Bug]: `fontsize` in tables not working\n### Bug summary\n\nSpecifying `fontsize` kwarg in `matplotlib.pyplot.table` doesn't have any effect.\n\n### Code for reproduction\n\n```Python\nimport matplotlib.pyplot as plt\r\nimport numpy as np\r\n\r\nx = np.linspace(0, 10, 100)\r\ny = x + 1\r\ntableData = [['a', 1], ['b', 1]]\r\n\r\nfig, ax = plt.subplots()\r\nax.plot(x, y)\r\nt = ax.table(\r\n    cellText=tableData,\r\n    loc='top',\r\n    cellLoc='center',\r\n    fontsize=30\r\n)\r\nplt.show()\n```\n\n\n### Actual outcome\n\n![Figure_1](https://github.com/user-attachments/assets/4a60237b-4060-4438-854e-ba2b7a5b73e1)\r\n\n\n### Expected outcome\n\nA table with bigger font size.\n\n### Additional information\n\nThis works:\r\n```\r\nimport matplotlib.pyplot as plt\r\nimport numpy as np\r\n\r\nx = np.linspace(0, 10, 100)\r\ny = x + 1\r\ntableData = [['a', 1], ['b', 1]]\r\n\r\nfig, ax = plt.subplots()\r\nax.plot(x, y)\r\nt = ax.table(\r\n    cellText=tableData,\r\n    loc='top',\r\n    cellLoc='center'\r\n)\r\nt.set_fontsize(30)  # <----------------\r\nplt.show()\r\n```\r\n![Figure_1](https://github.com/user-attachments/assets/b668e57f-e676-40bc-98cb-c3e35ede6ad8)\n\n### Operating system\n\nWindows 11\n\n### Matplotlib Version\n\n3.8.2\n\n### Matplotlib Backend\n\nQtAgg\n\n### Python version\n\n3.12.0\n\n### Jupyter version\n\n_No response_\n\n### Installation\n\npip\n",
+  "base_commit": "6a84a5d408ee2fff112223e8ead94ef6ebfe9c2d",
+  "created_at": "2024-12-08T18:35:04+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.matplotlib_1776_matplotlib-29258"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "deepset-ai__haystack-8969",
+  "repo": "deepset-ai/haystack",
+  "issue_text": "`ChatMessage.to_openai_dict_format()` ignores the `name` field\n**Describe the bug**\n`Chat Message`s have an optional `name` field which is handled by `ChatMessage.from_openai_dict_format()` but ignored by `ChatMessage.to_openai_dict_format()`.\n\n**Expected behavior**\nI would expect the name to be transmitted to the LLM.\n\n**FAQ Check**\n- [x] Have you had a look at [our new FAQ page](https://docs.haystack.deepset.ai/docs/faq)?\n\n**System:**\n - OS:\n - GPU/CPU:\n - Haystack version (commit or version number): v2.10.3\n - DocumentStore:\n - Reader:\n - Retriever:\n\n",
+  "base_commit": "830e7497c3a23cfd3354665ec6c77cec0e8105b3",
+  "created_at": "2025-03-05T05:13:16+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.deepset-ai_1776_haystack-8969"
+}

@@ -1,0 +1,77 @@
+seed: 0
+num_retries: 3           # LiteLLM retries for the agent, diagnosis, and verifier
+agent:
+  model_name: fireworks_ai/accounts/fireworks/models/qwen3-coder-30b-a3b-instruct
+  price_in_per_1m: 0.15
+  price_out_per_1m: 0.60
+  temperature: 0.0
+  step_limit: 25          # mock task only. Real tasks need larger limits, set after the pilot.
+  cost_limit: 0.50
+  wall_time_limit_seconds: 300
+  cost_tracking: ignore_errors
+environment:
+  kind: local              # local | docker (docker is a stub)
+  timeout: 30              # mock task only. Real tasks need larger limits, set after the pilot.
+verifier:
+  model_name: fireworks_ai/accounts/fireworks/models/gpt-oss-20b
+  price_in_per_1m: 0.07
+  price_out_per_1m: 0.30
+  temperature: 0.0
+  max_file_chars: 20000
+  max_file_contents_chars: 60000
+  write_prompt: |
+    Decide whether this attempted fix should be saved for future tasks
+    in the same repository. Say yes only if the patch is a plausible
+    attempt at the issue and the diagnosis describes that patch.
+    Do not use test results. You have not been shown any.
+
+    Issue:
+    {issue_text}
+
+    Diagnosis:
+    {diagnosis}
+
+    Patch:
+    {patch}
+
+    Reply with JSON only, no markdown:
+    {"decision": "yes" or "no", "reason": "one or two sentences"}
+  read_prompt: |
+    Decide whether a fix remembered from an earlier issue should be
+    shown to an agent that is about to solve a new issue. Say yes only
+    if the remembered fix is about the same kind of bug and still matches
+    the current contents of the files it touched. Say no if the files
+    have changed in a way that makes the old patch a poor guide, or if
+    the issues are only superficially similar.
+
+    New issue:
+    {issue_text}
+
+    Remembered issue:
+    {hint_issue_text}
+
+    Remembered diagnosis:
+    {diagnosis}
+
+    Remembered patch:
+    {patch}
+
+    Current contents of the files the remembered fix touched:
+    {file_contents}
+
+    Reply with JSON only, no markdown:
+    {"decision": "yes" or "no", "reason": "one or two sentences"}
+diagnosis:
+  prompt: |
+    Summarize this attempted fix in two or three sentences.
+    Describe what the change does. Do not say whether tests passed.
+    You have not been shown test results.
+
+    Issue:
+    {issue_text}
+
+    Patch:
+    {patch}
+memory:
+  db_path: runs/stream.sqlite
+  hint_prefix: "A similar past issue in this repo was handled like this:"

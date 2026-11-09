@@ -1,0 +1,9 @@
+{
+  "id": "matplotlib__matplotlib-29007",
+  "repo": "matplotlib/matplotlib",
+  "issue_text": "[Bug]: Figure Number Gives Type Error\n### Bug summary\r\n\r\nIt looks like the `Figure` stub does not include the number variable, resulting in a type error.\r\n\r\n### Code for reproduction\r\n\r\n```Python\r\nimport matplotlib.pyplot as plt\r\nscreen = plt.figure()\r\nprint(screen.number)\r\n```\r\n\r\n\r\n### Actual outcome\r\n\r\n![Screenshot](https://github.com/user-attachments/assets/6cbdb071-b14e-4be3-a569-a60c889371e6)\r\n\r\n### Expected outcome\r\n\r\n![Screenshot](https://github.com/user-attachments/assets/b9911591-38bf-4c75-b9da-1bf8e3e85e2e)\r\n\r\n### Additional information\r\n\r\nI think that this bug is happening because the stub files do not include the number variable for Figure.\r\n\r\n### Operating system\r\n\r\nWindows 11\r\n\r\n### Matplotlib Version\r\n\r\n3.9.2\r\n\r\n### Matplotlib Backend\r\n\r\ntkagg\r\n\r\n### Python version\r\n\r\n3.12.5\r\n\r\n### Jupyter version\r\n\r\n_No response_\r\n\r\n### Installation\r\n\r\npip\n",
+  "base_commit": "235bf97906db7bb3dca3fcc646b3895982c95810",
+  "created_at": "2024-10-22T07:52:37+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.matplotlib_1776_matplotlib-29007"
+}

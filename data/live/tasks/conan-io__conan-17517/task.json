@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17517",
+  "repo": "conan-io/conan",
+  "issue_text": "[feature] Log User for Remote in Verbose Mode\n<!-- What is your suggestion? Please be as specific as possible! -->\r\nWhen trying to download a package from a repo which hides existence of unauthorized resources (like Artifactory) trying to download a package results in an error that the package could not be found on the repo. Even when enabling the most verbose logging mode its nowhere written which user is used to get the package.\r\n\r\n```\r\npackage/1.0.2@repo/stable: Trying with 'gitlab'...\r\nDEBUG :rest_client_common.py[160]: REST: ping: https://gitlab.com/api/v4/packages/conan/v1/ping [2021-04-22 22:52:03,502]\r\nDEBUG :rest_client.py [58]: REST: Cached capabilities for the remote: [] [2021-04-22 22:52:03,644]\r\nDEBUG :rest_client_common.py[188]: REST: get: https://gitlab.com/api/v4/packages/conan/v1/conans/package/1.0.2/repo/stable/download_urls [2021-04-22 22:52:03,645]\r\nDEBUG :rest_client_common.py[30]: REST ERROR: <class 'conans.errors.NotFoundException'> [2021-04-22 22:52:03,703]\r\nERROR: Unable to find 'package/1.0.2@repo/stable' in remotes\r\n```\r\n\r\nIt would be a massive help if the user used for the remote could be found in those log lines!\r\n\r\nIt would may be even more helpful if the user used for the remote is logged in the general output not only in verbose mode. It could be something like \r\n\r\n```\r\npackage/1.0.2@repo/stable: Trying with 'anonymus' @ 'gitlab'...\r\n```\r\n\r\n- [x] I've read the [CONTRIBUTING guide](https://github.com/conan-io/conan/blob/develop/.github/CONTRIBUTING.md).\r\n\n",
+  "base_commit": "003e2cfb746dbc83370758c192edacebd761472b",
+  "created_at": "2024-12-20T22:31:36+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17517"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "aws-cloudformation__cfn-lint-3767",
+  "repo": "aws-cloudformation/cfn-lint",
+  "issue_text": "AWS::IAM::ManagedPolicy Condition syntax error not detected\n### CloudFormation Lint Version\r\n\r\ncfn-lint 1.16.1\r\n\r\n### What operating system are you using?\r\n\r\nLinux\r\n\r\n### Describe the bug\r\n\r\ncfn-lint is not detecting missing Condition operator.\r\n\r\n```shell\r\n$ cfn-lint --format json --include-checks I -t ./demo-template.yaml\r\n[]\r\n\r\n$ \r\n```\r\n\r\n\r\nCloudFormation throws the following syntax error:\r\n\r\n```\r\nResource handler returned message: \"Syntax errors in policy. (Service: Iam, Status Code: 400, Request ID: <redacted>)\" (RequestToken: <redacted>, HandlerErrorCode: InvalidRequest)\r\n```\r\n\r\n### Expected behavior\r\n\r\nThe missing operator should be detected.\r\n\r\n### Reproduction template\r\n\r\n```yaml\r\n---\r\nAWSTemplateFormatVersion: '2010-09-09'\r\nDescription: Example IAM policy syntax error not detected.\r\n\r\nResources:\r\n  IAMPolicy:\r\n    Type: AWS::IAM::ManagedPolicy\r\n    Properties:\r\n      Roles:\r\n        - DemoRole\r\n      PolicyDocument:\r\n        Version: '2012-10-17'\r\n        Statement:\r\n          - Effect: Allow\r\n            Action:\r\n              - servicecatalog:*\r\n            Resource: '*'\r\n            Condition:\r\n                servicecatalog:accountLevel: self\r\n```\n",
+  "base_commit": "7e514f46eb078a46051a2f0f9139a8340beb16b5",
+  "created_at": "2024-10-18T16:57:49+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.aws-cloudformation_1776_cfn-lint-3767@sha256:d05f79ab3d900cacdca27cbc7c109241bd3869846e864012002b35e5a521ff13"
+}

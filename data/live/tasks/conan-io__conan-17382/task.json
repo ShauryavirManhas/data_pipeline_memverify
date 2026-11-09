@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17382",
+  "repo": "conan-io/conan",
+  "issue_text": "Package Manager used with Chocolatey doesn't find already installed packages\n### Describe the bug\r\n\r\nThe command below in the recipe of my project is not able to check that the package is installed on my system:\r\n    Chocolatey(self).check([\"miktex\"])\r\n\r\nBut the package is correctly installed:\r\n  choco list\r\n  Chocolatey v2.4.0\r\n  chocolatey 2.4.0\r\n  miktex 24.4.0\r\n  miktex.install 24.4.0\r\n  3 packages installed.\r\n\r\nWindows PC, Conan version 2.9.3\r\n\r\n\r\n\r\n### How to reproduce it\r\n\r\nInstall miktex chocolatey package.\r\nExecute the code in a recipe:\r\n\r\n       def system_requirements(self):\r\n            missing_packages = []\r\n            apt_missing = Apt(self).check([\"miktex\"])\r\n            if apt_missing:\r\n                missing_packages.extend(apt_missing)\r\n\r\n            choco_missing = Chocolatey(self).check([\"miktex\", \"eee\"])\r\n            if choco_missing:\r\n                missing_packages.extend(choco_missing)\r\n\r\n            if missing_packages:\r\n                raise ConanException(\"System requirements not met, please install: {}\".format(\", \".join(missing_packages)))\r\n            \r\n\r\n\n",
+  "base_commit": "aa4920ec0935511b0f3d8f57040b70c00996e0c4",
+  "created_at": "2024-11-26T18:21:46+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17382"
+}

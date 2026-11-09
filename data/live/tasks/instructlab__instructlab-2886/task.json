@@ -1,0 +1,9 @@
+{
+  "id": "instructlab__instructlab-2886",
+  "repo": "instructlab/instructlab",
+  "issue_text": "[RAG][Dev] Integrate retrieval into chat\n### Description\n`ilab model chat` should perform RAG when configured to do so.\n\n### Acceptance Criteria\n* When config has RAG enabled, it is performed during chat\n* Appropriate unit tests are added\n* e2e tests for RAG-enabled chat are added\n",
+  "base_commit": "2fd5adb8fec09c51cbd607e4e852f2c1d4293348",
+  "created_at": "2025-01-08T19:44:12+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.instructlab_1776_instructlab-2886@sha256:0554e8fb75628ac0c926a097186ec5bd64a0e296820e71ef2b7851d4f5827e36"
+}

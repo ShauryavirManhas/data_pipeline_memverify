@@ -1,0 +1,9 @@
+{
+  "id": "deepset-ai__haystack-8973",
+  "repo": "deepset-ai/haystack",
+  "issue_text": "Pipeline drawing: expose `timeout` parameter and increase the default\nEnd-to-End Haystack tests (executed nightly) are failing due to [Mermaid timeouts](https://github.com/deepset-ai/haystack/actions/runs/13643217064/job/38137252561) during Pipeline drawing.\nI can also reproduce this on Colab running one of our tutorials.\n\nTo resolve this before 2.11.0, I would:\n- increase timeout (currently set to 10 seconds)\n- expose a `timeout` parameter, to allow users control this behavior\n",
+  "base_commit": "9da6696a45c0141715cd95030c861c3e9f3f40cf",
+  "created_at": "2025-03-05T10:24:19+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.deepset-ai_1776_haystack-8973"
+}

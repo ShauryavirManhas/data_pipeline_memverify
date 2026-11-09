@@ -1,0 +1,9 @@
+{
+  "id": "deepset-ai__haystack-8619",
+  "repo": "deepset-ai/haystack",
+  "issue_text": "Update the default value of `store_full_path` init to False in converters \nBased on the deprecation warning in 2.8.0 release, we should update the value of `store_full_path` param to `False` in Haystack 2.9.0. \r\nRelated issue: #8440 \n",
+  "base_commit": "248dccbdd341941b988b622c51c26d1b9af66876",
+  "created_at": "2024-12-10T11:23:00+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.deepset-ai_1776_haystack-8619"
+}

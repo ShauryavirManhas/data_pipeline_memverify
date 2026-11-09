@@ -1,0 +1,17 @@
+[project]
+name = "memverify"
+version = "0.1.0"
+description = "Memory-verification policies for a mini-swe-agent coding agent (CMU 11-768)."
+requires-python = ">=3.11"
+dependencies = [
+  "mini-swe-agent>=2,<3",
+  "pyyaml>=6",
+  "rank-bm25>=0.2",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["memverify*"]

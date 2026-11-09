@@ -1,0 +1,8 @@
+# Scorer, loader and go/no-go (Shaurya). Install on top of requirements.txt:
+#   python -m pip install -r requirements.txt -r requirements-eval.txt
+# Official SWE-bench-Live harness, python-only branch (the Lite split's evaluator), pinned.
+swebench @ git+https://github.com/microsoft/SWE-bench-Live@ad79b850f15e33992e96f03f6e97f05ddf9aa0be
+unidiff>=0.7
+datasets>=2.19
+# the local end-to-end scorer tests run a real pytest suite
+pytest>=7

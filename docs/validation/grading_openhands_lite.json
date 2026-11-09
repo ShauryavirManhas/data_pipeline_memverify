@@ -1,0 +1,12 @@
+{
+  "instances": 299,
+  "checked": 291,
+  "skipped": 8,
+  "eval_script_match": 291,
+  "resolved_match": 291,
+  "sets_match": 291,
+  "official_resolved_true": 74,
+  "grading_mismatches": 0,
+  "source": "https://github.com/SWE-bench-Live/submission (20250725-openhands-Qwen3-Coder-480B-A35B)",
+  "note": "eval_script_match counts byte-identical eval.sh; the SWE-agent logs came from an older harness that printed git status/show, which does not affect grading"
+}

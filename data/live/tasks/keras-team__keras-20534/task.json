@@ -1,0 +1,9 @@
+{
+  "id": "keras-team__keras-20534",
+  "repo": "keras-team/keras",
+  "issue_text": "apply_gradients AttributeError: 'ResourceVariable' object has no attribute 'overwrite_with_gradient'\nWhen I have a mix of tf.Variable and KerasVariables I get the following error:\r\n```\r\n--> 632     if v.overwrite_with_gradient:\r\n    633         if self.gradient_accumulation_steps:\r\n    634             # Utilize a stateless manner for JAX compatibility\r\n    635             steps = self.gradient_accumulation_steps\r\n\r\nAttributeError: 'ResourceVariable' object has no attribute 'overwrite_with_gradient'\r\n```\r\n\r\nI suspect this is because my list of variables is [KerasVariables] + [tf.Variables]\r\nand the following line only checks the first in the list as to whether overwrite_with_gradient can be used?\r\nhttps://github.com/keras-team/keras/blob/660da946d33ccbb53575f15a17abdfd725cd2086/keras/src/optimizers/base_optimizer.py#L675\r\n\n",
+  "base_commit": "a93828a94f105909f9398c00d2cddf4ac43197ac",
+  "created_at": "2024-11-22T05:04:05+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.keras-team_1776_keras-20534"
+}

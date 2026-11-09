@@ -1,0 +1,9 @@
+{
+  "id": "aws-cloudformation__cfn-lint-3821",
+  "repo": "aws-cloudformation/cfn-lint",
+  "issue_text": "CloudFront OAI ARN incorrectly fails I3042:accountId check\n### CloudFormation Lint Version\n\n1.18.4\n\n### What operating system are you using?\n\nMac, Ubuntu\n\n### Describe the bug\n\ncfn-lint expects the `:cloudfront:` segment of the CloudFront OAI ARN to not be a hardcoded account ID, when the `:cloudfront:` segment should be hardcoded to `cloudfront`.\r\n\r\n```\r\n$ cfn-lint --format pretty --regions us-east-2 --include-checks I --configure-rule E3012:strict=True I3042:region=True I3042:accountId=True -- template.yaml\r\ntemplate.yaml\r\n12:15:              I3042     ARN in Resource Resource contains hardcoded AccountId in ARN or incorrectly placed Pseudo Parameters\r\n```\r\n\r\nRelated to #3683, #3716\n\n### Expected behavior\n\nCloudFront OAI ARN doesn't fail I3042:accountId check\n\n### Reproduction template\n\n```yaml\r\nAWSTemplateFormatVersion: 2010-09-09\r\nResources:\r\n  Resource:\r\n    Type: AWS::S3::BucketPolicy\r\n    Properties:\r\n      Bucket: bucket\r\n      PolicyDocument:\r\n        Version: 2012-10-17\r\n        Statement:\r\n          - Effect: Allow\r\n            Principal:\r\n              AWS: !Sub arn:${AWS::Partition}:iam::cloudfront:user/CloudFront Origin Access Identity E15MNIMTCFKK4C\r\n            Action: s3:GetObject\r\n            Resource: arn:aws:s3:::bucket/*\r\n```\n",
+  "base_commit": "9d83f3fb144cf8034fb5d1e9de4cc26d89814686",
+  "created_at": "2024-11-11T20:15:46+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.aws-cloudformation_1776_cfn-lint-3821@sha256:4153be91aa638d3091228a3369279571717819b7f85307af458bd469133d8eda"
+}

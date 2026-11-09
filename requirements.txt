@@ -1,0 +1,4 @@
+mini-swe-agent==2.4.6
+PyYAML==6.0.3
+rank-bm25==0.2.2
+litellm==1.108.2

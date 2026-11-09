@@ -1,0 +1,9 @@
+{
+  "id": "run-llama__llama_deploy-438",
+  "repo": "run-llama/llama_deploy",
+  "issue_text": "Timeout for nested network workflows fixed at 120 seconds\nThe NetworkWorkflow which is used to allow workflows to use other services/workflows in Llama deploy uses the AsyncLlamaDeployClient this client has a default timeout of 120 seconds which is used both as a request timeout to the llama deploy control plane, and as the timeout for session.run(...).\n\nThere is currently no way to override this so even when talking to a downstream service with a longer timeout it caps the request at 120 seconds.\n\nWhen issuing a task to llama deploy perhaps the Client should pick up the timeout from the service i.e. if WorkflowA's configured timeout is 60 seconds, when issuing a request to that service the default wait_for should be 60 seconds?\n\nAlternatively (and I think this might influence the Workflow API) workflow.run(...) should take a timeout as an override for the default timeout in the workflow. That way the session.run(..) API can also take a timeout and remain compatible. So then different calls to nested workflows at different points in a parent workflow could specify different timeouts.\n\n\n",
+  "base_commit": "59b23d379cfa8378490675021d20bf51dbee652d",
+  "created_at": "2025-01-24T11:43:09+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.run-llama_1776_llama_deploy-438@sha256:a4feb59f8d279f50e6002af79896e5cf32dce392e5ba4819ec5cf99fb598e2c3"
+}

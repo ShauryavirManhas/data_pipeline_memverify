@@ -1,0 +1,9 @@
+{
+  "id": "aws-cloudformation__cfn-lint-3862",
+  "repo": "aws-cloudformation/cfn-lint",
+  "issue_text": "Running `cfn-lint file_that_does_not_exist.yml` has exit code 0 and no error message\n### CloudFormation Lint Version\n\ncfn-lint 1.19.0\n\n### What operating system are you using?\n\nUbuntu\n\n### Describe the bug\n\nRunning `cfn-lint file_that_does_not_exist.yml` should return exit_code > 0, and should ideally give a stderr message that the file doesn't exist. \r\n\r\nCurrently, the program exists the exact same way as if nothing happened.\n\n### Expected behavior\n\nRunning `cfn-lint file_that_does_not_exist.yml` should return exit_code > 0, and should ideally give a stderr message that the file doesn't exist. \n\n### Reproduction template\n\nN/A\n",
+  "base_commit": "30ecbc1fe4ffe2dd3690071f891352e15419b874",
+  "created_at": "2024-12-09T20:03:09+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.aws-cloudformation_1776_cfn-lint-3862@sha256:dc804a63820e55579e30c9bd02b4ead7019ee61a3c7ed37402de36715cfd3c63"
+}

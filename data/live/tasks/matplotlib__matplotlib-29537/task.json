@@ -1,0 +1,9 @@
+{
+  "id": "matplotlib__matplotlib-29537",
+  "repo": "matplotlib/matplotlib",
+  "issue_text": "[Bug]: ScalarFormatter cant be forced to use an offset of 1\n### Bug summary\n\nThe ScalarFormatter class takes an argument useOffset, either True, which will determine an automatic offset, False, which disables an offset or an numeric value, which is the used as an offset.\nSince in python 1 == True --> True, trying to pass a numeric offset value of 1 just enables the automatic offset.\n\nhttps://matplotlib.org/stable/api/ticker_api.html#matplotlib.ticker.ScalarFormatter\n\n### Code for reproduction\n\n```Python\nimport matplotlib.pyplot as plt\nimport numpy as np\nfrom matplotlib.ticker import ScalarFormatter\n\n# Sample data\nx = np.linspace(0, 10, 100)\ny = np.linspace(0.999, 1.001, 100)\n\n# Create the plot\nfig, ax = plt.subplots()\nax.plot(x, y)\n\nformatter = ScalarFormatter()\nformatter.set_useOffset(1)\n# identical to formatter = ScalarFormatter(useOffset=1)\nax.yaxis.set_major_formatter(formatter)\n\nplt.show()\n```\n\n### Actual outcome\n\n![Image](https://github.com/user-attachments/assets/a20a17cc-0605-4f14-b8e3-db1b3ec33c52)\n\n### Expected outcome\n\nThe y-Axis should be centered around zero, the expected offset of 1 is not used\n\n### Additional information\n\nHappens only for useOffset = 1.\nIf the y values are changed (i.e. y = np.linspace(0.99999, 1.00001, 100)), the automatic offset actually uses an offset of 1, so the bug is not obvious then.\n\n### Operating system\n\nWin 11\n\n### Matplotlib Version\n\n3.7.2\n\n### Matplotlib Backend\n\nmodule://matplotlib_inline.backend_inline\n\n### Python version\n\n_No response_\n\n### Jupyter version\n\n6.5.4\n\n### Installation\n\nconda\n",
+  "base_commit": "29f3a5ca0bd366d5bffebfcfba6181af322041b3",
+  "created_at": "2025-01-28T17:47:19+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.matplotlib_1776_matplotlib-29537"
+}

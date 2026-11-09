@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17408",
+  "repo": "conan-io/conan",
+  "issue_text": "[question] Install latest version (or version range) from local recipes index\n### What is your question?\r\n\r\nIn my CI, I use a `local-recipes-index` remote, from which I want to build the latest version of my packages. If I have a \"normal\" remote, I can do that with\r\n```\r\n$ conan install --requires pkg/[] -b missing\r\n```\r\nHowever, that doesn't seem to work with a local index:\r\n```\r\n$ conan list -r local-recipes *\r\nFound 1 pkg/version recipes matching * in local-detectors\r\nlocal-recipes\r\n  attribute-processing-api\r\n    attribute-processing-api/2.3.1@user/stable\r\n$ conan install --requires attribute-processing-api/[]@user/stable -r local-recipes\r\n[...]\r\n======== Computing dependency graph ========\r\nGraph root\r\n    cli\r\nERROR: Package 'attribute-processing-api/[]@user/stable' not resolved: Version range '' from requirement 'attribute-processing-api/[]@user/stable' required by 'None' could not be resolved.\r\n```\r\n\r\nIt seems, version ranges in general are not supported for local recipe indexes, even though `conan list` can determine all the versions in the remote.\r\n\r\nIs this expected behavior? If yes, how would I go and build all the latest versions of my packages in that case. I don't really want to specify the explicit version in multiple places as that would be quite error-prone/easy to forget.\r\n\r\n\r\n\r\n\r\n\r\n### Have you read the CONTRIBUTING guide?\r\n\r\n- [X] I've read the CONTRIBUTING guide\n",
+  "base_commit": "6765af055555c60f2170352e3f2d809a101d351a",
+  "created_at": "2024-12-04T00:16:41+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17408"
+}

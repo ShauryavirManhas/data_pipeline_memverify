@@ -1,0 +1,9 @@
+{
+  "id": "instructlab__instructlab-2526",
+  "repo": "instructlab/instructlab",
+  "issue_text": "Nvidia support - Update training profiles to use FSDP as default\nBlocked on: \r\n- [x] https://github.com/instructlab/training/issues/292\r\n\n",
+  "base_commit": "22b88e7d3866ca5410bb2ecfd3081486d0566dc5",
+  "created_at": "2024-10-23T14:59:49+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.instructlab_1776_instructlab-2526"
+}

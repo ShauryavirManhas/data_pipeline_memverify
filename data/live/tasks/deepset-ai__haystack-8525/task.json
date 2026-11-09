@@ -1,0 +1,9 @@
+{
+  "id": "deepset-ai__haystack-8525",
+  "repo": "deepset-ai/haystack",
+  "issue_text": "Support splitting of CSV documents\n**Is your feature request related to a problem? Please describe.**\r\nRecently a CSVToDocument converter has been added to Haystack here: https://github.com/deepset-ai/haystack/pull/8328\r\n\r\nWithin that PR we realized that a common split pattern for CSV documents is to split by row and we decided in that PR to add that functionality to either the existing `DocumentSplitter` or create a new splitter (e.g. `TableDocumentSplitter`). \r\n\r\nMore context can be found here: https://github.com/deepset-ai/haystack/pull/8328#issuecomment-2455106340\r\n\r\nSo my desired solution would be to add support for splitting of CSV files, and my main question is where should this go?\r\n\r\ncc @srini047 @bmillerncqa\r\n\r\n**Describe alternatives you've considered**\r\nIt is currently possible to achieve this row splitting using the custom function to the `DocumentSplitter`, but I think it would be good to have default support for splitting up CSV files within Haystack rather than relying on a custom function. \r\n\n",
+  "base_commit": "911f3523ab94472bd9a1f8ecbd2493437058daee",
+  "created_at": "2024-11-08T15:33:06+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.deepset-ai_1776_haystack-8525"
+}

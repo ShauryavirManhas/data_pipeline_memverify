@@ -1,0 +1,9 @@
+{
+  "id": "matplotlib__matplotlib-29486",
+  "repo": "matplotlib/matplotlib",
+  "issue_text": "[Bug]: On polar axis, stem plot with non-zero bottom has an extra red line.\n### Bug summary\n\nI'm tring to make stem plots on polar axis. When I set the stem bottom to non-zero values, I noticed an abnormal red line that connects the bottom of first and last stem. I don't think this is an expected behaviour.\n\n### Code for reproduction\n\n```Python\nimport matplotlib.pyplot as plt\nimport numpy as np\n\n# Fixing random state for reproducibility\nnp.random.seed(19680801)\n\n# Compute areas and colors\nN = 50\nr = 2 * np.random.rand(N)\ntheta = 2 * np.pi * np.random.rand(N)\n\nfig = plt.figure()\nax = fig.add_subplot(projection='polar')\nc1 = ax.stem(\n    theta, \n    r+4, \n    bottom=4,\n)\n```\n\n### Actual outcome\n\n![Image](https://github.com/user-attachments/assets/597e2f81-2023-42fa-83b5-10de2085adb1)\n\n### Expected outcome\n\nA plot without the red line connectting the bottom of first and last stem.\n\n### Additional information\n\n_No response_\n\n### Operating system\n\n_No response_\n\n### Matplotlib Version\n\n3.10.0\n\n### Matplotlib Backend\n\n_No response_\n\n### Python version\n\n_No response_\n\n### Jupyter version\n\n_No response_\n\n### Installation\n\nNone\n",
+  "base_commit": "ae2115c1456956fbc7073736b0999bf2d7342b2d",
+  "created_at": "2025-01-20T09:59:33+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.matplotlib_1776_matplotlib-29486"
+}

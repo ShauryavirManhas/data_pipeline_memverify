@@ -1,0 +1,9 @@
+{
+  "id": "reflex-dev__reflex-4087",
+  "repo": "reflex-dev/reflex",
+  "issue_text": "reset() does not clear private (i.e. _ ) attributes\n**Describe the bug**\r\nreset() clears the state of public attributes but the private attributes continue to keep their values. \r\n\r\nThis happens when calling the reset of all substates from a single state using  \r\n\"await self.get_state\" and then calling the reset on the result. \r\n\r\nPrint statements before and after the reset show the public attributes are cleared but the private ones are not. \r\n\r\n**Expected behavior**\r\nboth private and public state attributes should be cleared when reset is called \r\n\r\n**Specifics (please complete the following information):**\r\n - Python Version: 3.12.3\r\n - Reflex Version:  0.6.2a1\r\n - OS: Ubuntu\r\n - Browser (Optional):\r\n \n",
+  "base_commit": "bec73109d60c08f0e27d407858f8048b2d5c354c",
+  "created_at": "2024-10-07T21:01:42+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.reflex-dev_1776_reflex-4087"
+}

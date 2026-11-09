@@ -1,0 +1,9 @@
+{
+  "id": "pvlib__pvlib-python-2400",
+  "repo": "pvlib/pvlib-python",
+  "issue_text": "PVSPEC model coefficients for First Solar modules use wrong keys\n**Describe the bug**\nThe function pvlib.spectrum.mismatch.spectral_factor_pvspec has a dictionary of coefficients. These have incorrect keys for the two types of First Solar modules. module types for these are 'fs4-1' and 'fs4-2', but the coefficients have keys 'fs-2' and 'fs-4', which should be 'fs4-2' and 'fs4-1', respectively.\n\n**To Reproduce**\nSteps to reproduce the behavior:\n1. Try running:\n        test=pvlib.spectrum.mismatch.spectral_factor_pvspec(airmass_absolute = 1.5, clearsky_index = 1, module_type='fs4-1')\nor\n        test=pvlib.spectrum.mismatch.spectral_factor_pvspec(airmass_absolute = 1.5, clearsky_index = 1, module_type='fs4-2')\n\nIn both cases you should get an error. For example:\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"C:\\Users\\spelland\\.venv\\spectral_env\\Lib\\site-packages\\pvlib\\spectrum\\mismatch.py\", line 585, in spectral_factor_pvspec\n    coefficients = _coefficients[module_type.lower()]\n                   ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^\nKeyError: 'fs4-1'\n \n2.  If you run with one of the other module types, there should be no error. e.g:                                                      test_that_works =pvlib.spectrum.mismatch.spectral_factor_pvspec(airmass_absolute = 1.5, clearsky_index = 1, module_type='monosi')\n\n",
+  "base_commit": "171f10ca1c2a73ea41a06e4c6ecf4de1f53523e7",
+  "created_at": "2025-02-25T23:01:48+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.pvlib_1776_pvlib-python-2400"
+}

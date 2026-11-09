@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17538",
+  "repo": "conan-io/conan",
+  "issue_text": "[feature] conan workspace build command\n### What is your suggestion?\n\nHello!\r\n\r\nAs part of the workspace feature (#15992), I would like to have a `conan workspace build` command. The idea is that it would resolve the dependency graph and build missing editable packages in the cache (I expect that here, you would need to build all and rely on the underlying build system caching the build artifacts correctly).\r\n\r\nIn my [example repo](https://github.com/aander80/conan-workspace-test) where I am testing workspaces, I am thinking that I should be able to run `conan workspace build` and it will first build `liba` and `libb`, followed by `app` (`app` is an executable depending on static libraries `liba` and `libb`).\r\n\r\nThis would allow users to mimic a monorepo with multiple repos, and have a nice CLI similar to what you have with `cargo build` with workspaces in Rust.\n\n### Have you read the CONTRIBUTING guide?\n\n- [X] I've read the CONTRIBUTING guide\n",
+  "base_commit": "5aedd8e94beafaf95df5379b5035dca60e3faff7",
+  "created_at": "2024-12-30T11:47:03+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17538"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "instructlab__instructlab-2585",
+  "repo": "instructlab/instructlab",
+  "issue_text": "name of the merlinite template\nthe merlinite template is used by both merlinite and granite (and probably future models trained through instructlab).\r\nperhaps we should rename it here (https://github.com/instructlab/instructlab/blob/main/src/instructlab/server.py#L27) as `instructlab` and make the model-template mapping explicit here (https://github.com/instructlab/instructlab/blob/main/src/instructlab/config.py#L48) as \r\n```\r\nMODEL_FAMILY_MAPPINGS = {\r\n    \"merlinite\": \"instructlab\",\r\n    \"granite\": \"instructlab\",\r\n    \"mixtral\": \"mixtral\",\r\n}\r\n```\r\ncc @russellb \nSwitch default model from Merlinite to Granite\nInstructLab has moved pretty heavily towards being a Granite-first project, yet many of the config defaults for models remain to be Merlinite. Opening this issue to start the conversation of switching over to Granite quanitized GGUFs and Safetensors, where applicable.\r\n\r\nMerlinite can still be used in things like CI.\r\n\r\nIf folks agree I can convert this issue from a `question` to a `refactor` and implement it.\n",
+  "base_commit": "b56e1ae626617a1e5982126302e0e4c2abd7e649",
+  "created_at": "2024-11-05T19:52:58+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.instructlab_1776_instructlab-2585@sha256:8e2706a6eeeff07b9734ddc3eddecbcb8285fa397a15850de1c1356ea9120526"
+}

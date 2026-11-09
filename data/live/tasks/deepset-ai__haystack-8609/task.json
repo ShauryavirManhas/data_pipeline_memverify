@@ -1,0 +1,9 @@
+{
+  "id": "deepset-ai__haystack-8609",
+  "repo": "deepset-ai/haystack",
+  "issue_text": "`PyPDFToDocument` - remove deprecated `converter` init parameter\nThis init parameter has been deprecated in #8569.\r\n\r\nWe should remove it before releasing Haystack 2.9.0.\r\n\r\n(check #8553 for the motivation)\n",
+  "base_commit": "3da5bac8c4743c59940e857d5d7a0552604d3fa9",
+  "created_at": "2024-12-06T09:41:38+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.deepset-ai_1776_haystack-8609"
+}

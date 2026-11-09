@@ -1,0 +1,135 @@
+{
+  "repos": [
+    {
+      "repo": "conan-io/conan",
+      "n": 23,
+      "pairs": 253,
+      "stale_pairs": 241,
+      "adjacent_pairs": 22,
+      "adjacent_stale": 14,
+      "ancestor_pairs": 251,
+      "stale_hunk_pairs": 183,
+      "patch_no_longer_applies": 183
+    },
+    {
+      "repo": "deepset-ai/haystack",
+      "n": 20,
+      "pairs": 190,
+      "stale_pairs": 187,
+      "adjacent_pairs": 19,
+      "adjacent_stale": 16,
+      "ancestor_pairs": 187,
+      "stale_hunk_pairs": 153,
+      "patch_no_longer_applies": 176
+    },
+    {
+      "repo": "aws-cloudformation/cfn-lint",
+      "n": 16,
+      "pairs": 120,
+      "stale_pairs": 109,
+      "adjacent_pairs": 15,
+      "adjacent_stale": 12,
+      "ancestor_pairs": 120,
+      "stale_hunk_pairs": 109,
+      "patch_no_longer_applies": 89
+    },
+    {
+      "repo": "matplotlib/matplotlib",
+      "n": 15,
+      "pairs": 105,
+      "stale_pairs": 93,
+      "adjacent_pairs": 14,
+      "adjacent_stale": 12,
+      "ancestor_pairs": 103,
+      "stale_hunk_pairs": 78,
+      "patch_no_longer_applies": 78
+    },
+    {
+      "repo": "streamlink/streamlink",
+      "n": 11,
+      "pairs": 55,
+      "stale_pairs": 55,
+      "adjacent_pairs": 10,
+      "adjacent_stale": 10,
+      "ancestor_pairs": 55,
+      "stale_hunk_pairs": 52,
+      "patch_no_longer_applies": 52
+    },
+    {
+      "repo": "instructlab/instructlab",
+      "n": 7,
+      "pairs": 21,
+      "stale_pairs": 19,
+      "adjacent_pairs": 6,
+      "adjacent_stale": 4,
+      "ancestor_pairs": 21,
+      "stale_hunk_pairs": 14,
+      "patch_no_longer_applies": 19
+    },
+    {
+      "repo": "koxudaxi/datamodel-code-generator",
+      "n": 7,
+      "pairs": 21,
+      "stale_pairs": 21,
+      "adjacent_pairs": 6,
+      "adjacent_stale": 6,
+      "ancestor_pairs": 21,
+      "stale_hunk_pairs": 16,
+      "patch_no_longer_applies": 19
+    },
+    {
+      "repo": "python-telegram-bot/python-telegram-bot",
+      "n": 7,
+      "pairs": 21,
+      "stale_pairs": 20,
+      "adjacent_pairs": 6,
+      "adjacent_stale": 5,
+      "ancestor_pairs": 21,
+      "stale_hunk_pairs": 15,
+      "patch_no_longer_applies": 20
+    },
+    {
+      "repo": "jlowin/fastmcp",
+      "n": 6,
+      "pairs": 15,
+      "stale_pairs": 11,
+      "adjacent_pairs": 5,
+      "adjacent_stale": 3,
+      "ancestor_pairs": 15,
+      "stale_hunk_pairs": 11,
+      "patch_no_longer_applies": 11
+    },
+    {
+      "repo": "kedro-org/kedro",
+      "n": 6,
+      "pairs": 15,
+      "stale_pairs": 11,
+      "adjacent_pairs": 5,
+      "adjacent_stale": 2,
+      "ancestor_pairs": 12,
+      "stale_hunk_pairs": 9,
+      "patch_no_longer_applies": 10
+    },
+    {
+      "repo": "reflex-dev/reflex",
+      "n": 6,
+      "pairs": 15,
+      "stale_pairs": 14,
+      "adjacent_pairs": 5,
+      "adjacent_stale": 4,
+      "ancestor_pairs": 14,
+      "stale_hunk_pairs": 13,
+      "patch_no_longer_applies": 12
+    }
+  ],
+  "note": "ordered by PR number as a proxy for created_at; files from a submitted (not gold) patch",
+  "totals": {
+    "pairs": 831,
+    "stale_pairs": 781,
+    "adjacent_pairs": 113,
+    "adjacent_stale": 88,
+    "ancestor_pairs": 820,
+    "stale_hunk_pairs": 653,
+    "patch_no_longer_applies": 669
+  }
+}

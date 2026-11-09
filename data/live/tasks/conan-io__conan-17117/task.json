@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17117",
+  "repo": "conan-io/conan",
+  "issue_text": "[question] What is the difference between test_requires() or build_requires(, force_host_context=True) and requires with \"private\" flag?\n### What is your question?\r\n\r\nWhat is the difference between test_requires() or build_requires(, force_host_context=True) and requires with \"private\" flag?\r\n\r\nThis refers to the documentation:\r\nhttps://docs.conan.io/1/devtools/build_requires.html#build-and-host-contexts\r\nhttps://docs.conan.io/1/reference/conanfile/attributes.html#requires\r\n\r\ne.g. what is the difference between:\r\n\r\n```\r\ndef build_requirements(self):\r\n        self.test_requires(\"pkgA/0.1\")\r\n```\r\n\r\nand \r\n\r\n```\r\ndef requirements(self):\r\n        self.requires(\"pkgA/0.1\", \"private\")\r\n```\r\n\r\n?\r\n\r\nI assume in both cases it does not lead to transitive dependencies and they are in the host context, right?\r\n\r\n\r\n### Have you read the CONTRIBUTING guide?\r\n\r\n- [X] I've read the CONTRIBUTING guide\n",
+  "base_commit": "384eb0faf82bfc514b644469ba042da341fefaf7",
+  "created_at": "2024-10-04T17:37:23+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17117"
+}

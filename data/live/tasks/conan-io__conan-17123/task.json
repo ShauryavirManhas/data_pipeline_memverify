@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17123",
+  "repo": "conan-io/conan",
+  "issue_text": "[feature] Support inverse match with .conanignore\n### What is your suggestion?\n\nAs recommended, we store our Conan config in a distinct Git repository. Since we use many automation tools, we end up with numerous config files and other dotfiles in the repository unrelated to Conan. This repo also serves as a template for other project maintainers, who might add more non-Conan related files. `.conanignore` files are helpful for filtering files to be installed. However, they would be more useful if they supported inverse matching, just like `.gitignore` or `.dockerignore` do. This is especially true for the latter, where it's common practice to ignore all files and only explicitly add those required, e.g.:\r\n\r\n```ignore\r\n*\r\n!profiles/\r\n!global.conf\r\n!remotes.json\r\n```\r\n\r\nI believe this would make maintaining such a config repository much easier. If third-party libraries are an option, there are [gitignore-compatible parsers](https://pypi.org/project/gitignore-parser/) already available for Python.\n\n### Have you read the CONTRIBUTING guide?\n\n- [x] I've read the CONTRIBUTING guide\n",
+  "base_commit": "1e42a99a1d6225f320a4938fcd7a778a88a8b410",
+  "created_at": "2024-10-06T19:25:22+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17123"
+}

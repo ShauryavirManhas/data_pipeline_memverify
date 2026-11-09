@@ -1,0 +1,9 @@
+{
+  "id": "deepset-ai__haystack-8981",
+  "repo": "deepset-ai/haystack",
+  "issue_text": "add run_async for HuggingFaceLocalChatGenerator\n\n",
+  "base_commit": "c4fafd9b04a6d0988a23ecda626c2473891ef7e5",
+  "created_at": "2025-03-05T14:04:17+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.deepset-ai_1776_haystack-8981"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "pvlib__pvlib-python-2249",
+  "repo": "pvlib/pvlib-python",
+  "issue_text": "Failed unit test for nrel 2008 solar position algorithm\n**Describe the bug**\r\nIn the documentation for the nrel 2008 solar position algorithm, there are a set of \"unit tests\" in table A4.1 \r\n\r\n![image](https://github.com/pvlib/pvlib-python/assets/33131958/3a4ee954-8ec3-414b-93e7-b327e7794713)\r\nhttps://www.nrel.gov/docs/fy08osti/34302.pdf\r\n\r\n**To Reproduce**\r\nSteps to reproduce the behavior:\r\n1. run `julian_day_dt()` with the following parameters\r\n```\r\nyear = 837,\r\nmonth = 4,\r\nday = 10,\r\nhour = 7,\r\nminute = 12,\r\nsecond = 0,\r\nmicrosecond = 0\r\n```\r\n2. result is 2026867.8\r\n\r\n**Expected behavior**\r\nexpected result in table A4.1 is 2026871.8\r\n\r\n**Screenshots**\r\n![image](https://github.com/pvlib/pvlib-python/assets/33131958/23822da6-2de0-4e71-ad1f-6c27285661cf)\r\n\r\n**Versions:**\r\n - ``pvlib.10.5`: \r\n - python: 3.11\r\n\r\n**Additional context**\r\nPerhaps this has something to do with the gregorian / julian date cutoff?  All of the other tests complete as expected.\r\n\n",
+  "base_commit": "38eb89e5a9ac3b61ca71834a3e92af7dd51e03f5",
+  "created_at": "2024-10-09T19:06:18+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.pvlib_1776_pvlib-python-2249"
+}

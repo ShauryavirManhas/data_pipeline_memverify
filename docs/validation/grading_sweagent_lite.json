@@ -1,0 +1,12 @@
+{
+  "instances": 255,
+  "checked": 254,
+  "skipped": 1,
+  "eval_script_match": 0,
+  "resolved_match": 254,
+  "sets_match": 254,
+  "official_resolved_true": 53,
+  "grading_mismatches": 254,
+  "source": "https://github.com/SWE-bench-Live/submission (sweagent/20250501-sweagent-claude37)",
+  "note": "eval_script_match counts byte-identical eval.sh; the SWE-agent logs came from an older harness that printed git status/show, which does not affect grading"
+}

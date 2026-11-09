@@ -1,0 +1,9 @@
+{
+  "id": "matplotlib__matplotlib-29249",
+  "repo": "matplotlib/matplotlib",
+  "issue_text": "[Bug]: get_tick_params on xaxis shows wrong keywords\n### Bug summary\n\n`get_tick_params` on xaxis shows yaxis keywords\n\n### Code for reproduction\n\n```python\nimport matplotlib.pyplot as plt\r\n\r\nfig, ax = plt.subplots()\r\n\r\nprint(ax.xaxis.get_tick_params())\n```\n\n\n### Actual outcome\n\n{'left': True, 'right': False, 'labelleft': True, 'labelright': False, 'gridOn': False}\n\n### Expected outcome\n\n{'bottom': True, 'top': False, 'labelbottom': True, 'labeltop': False, 'gridOn': False}\n\n### Additional information\n\nThe current implementation of `get_tick_params` tries to invert the [`keymap`](https://github.com/matplotlib/matplotlib/blob/eb02b108ea181930ab37717c75e07ba792e01f1d/lib/matplotlib/axis.py#L1071-L1084) dict which is impossible because this dict is a 1:n relationship (multiple keys with the same value).  \r\nThis went unnoticed because the [test_axis_get_tick_params](https://github.com/matplotlib/matplotlib/blob/379989e9529b9c98dc866a338b272beedf1f697a/lib/matplotlib/tests/test_axes.py#L6794) didn't actually test anything: the expected value is _calculated_ in the test using the very same algorithm as the function under test.\n\n### Operating system\n\n_No response_\n\n### Matplotlib Version\n\n3.8.2\n\n### Matplotlib Backend\n\n_No response_\n\n### Python version\n\n_No response_\n\n### Jupyter version\n\n_No response_\n\n### Installation\n\nNone\n",
+  "base_commit": "eec68e40db9e2de2a592cdd6956443b2534bb37f",
+  "created_at": "2024-12-07T02:36:10+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.matplotlib_1776_matplotlib-29249"
+}

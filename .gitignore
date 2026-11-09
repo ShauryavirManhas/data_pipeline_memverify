@@ -1,0 +1,24 @@
+__pycache__/
+*.py[cod]
+.venv/
+runs/
+*.sqlite
+*.sqlite3
+.env
+
+# data and scoring outputs (Shaurya)
+data/repos/
+data/live/instances.jsonl
+go_no_go/logs/
+score_logs/
+
+# mock task repos are rebuilt from tasks/*/repo.bundle (scripts/setup_mock_tasks.sh)
+tasks/*/repo/
+
+# local run outputs
+go_no_go_test/
+.DS_Store
+.pytest_cache/
+
+# shared zips
+*.zip

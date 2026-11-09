@@ -1,0 +1,9 @@
+{
+  "id": "aws-cloudformation__cfn-lint-3749",
+  "repo": "aws-cloudformation/cfn-lint",
+  "issue_text": "Fn::ForEach could not be resolved when values array references Map using AccountId key\n### CloudFormation Lint Version\r\n\r\ncfn-lint 1.16.1 / git v1.16.1-5-g07652d4a4\r\n\r\n### What operating system are you using?\r\n\r\nMac\r\n\r\n### Describe the bug\r\n\r\n`cfn-lint` fails to resolve `Fn::ForEach` when values array comes from Map with `AccountId` key\r\n\r\n```\r\n$ cfn-lint mapt.yaml \r\nE0001 Error transforming template: Fn::ForEach could not be resolved\r\nmapt.yaml:11:7\r\n```\r\n\r\n### Expected behavior\r\n\r\ncfn-lint passes\r\n\r\n### Reproduction template\r\n\r\n```yaml\r\nAWSTemplateFormatVersion: '2010-09-09'\r\nTransform: AWS::LanguageExtensions\r\nMappings:\r\n  AccountMap:\r\n    12345678901:\r\n      Emails:\r\n        - test@test.com\r\nResources:\r\n  'Fn::ForEach::Subscriptions':\r\n    - Email\r\n    - !FindInMap [AccountMap, !Ref AWS::AccountId, Emails]\r\n    - 'SubscriptionFor&{Email}':\r\n        Type: AWS::SNS::Subscription\r\n        Properties:\r\n          TopicArn: \"arn:aws:sns:us-east-1:12345678901:my-sns-topic\"\r\n          Protocol: email\r\n          Endpoint: !Ref Email\r\n```\n",
+  "base_commit": "07652d4a4133e825aeeb09973398575b25713c82",
+  "created_at": "2024-10-15T20:46:50+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.aws-cloudformation_1776_cfn-lint-3749@sha256:f66404b8fee73c41820929afe4778e2c0dbba735a950ad9a042ae9e2ea649d29"
+}

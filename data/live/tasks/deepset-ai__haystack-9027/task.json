@@ -1,0 +1,9 @@
+{
+  "id": "deepset-ai__haystack-9027",
+  "repo": "deepset-ai/haystack",
+  "issue_text": "Add warning to `PromptBuilder` and `ChatPromptBuilder` if no `required_variables` is set\n**Is your feature request related to a problem? Please describe.**\nMost of our components require some (or all) inputs during runtime. For our components whose inputs are based on Jinja2 templates (e.g. `ConditionalRouter`, `OutputAdpater`, `PromptBuilder`, and `ChatPromptBuilder`) we differ on how we treat whether all Jinja2 variables are required or are optional by default. For example, the components `ConditionalRouter`, and `OutputAdpater` we require all Jinja2 variables defined in their templates to run. But for the `PromptBuilder`, and `ChatPromptBuilder` we set all Jinja2 variables as optional by default. \n\nThis optionality has caused \"intended\" but usually unexpected behavior (from the perspective of the user) when running pipelines with multiple branches where each branch may contain a (Chat)PromptBuilder + (Chat)Generator. Specifically, if no required variables are set in the prompt builder then that component will always trigger even if it's along a branch that has been turned \"off\" by a previous `ConditionalRouter`. \n\n**Describe the solution you'd like**\nTo help make users aware of this behavior @julian-risch and I agreed that adding a warning to the init method of the `PromptBuilder` and `ChatPromptBuilder` when 1) Jinja2 variables are present in the template and 2) `required_variables=None` makes sense. \n\nThis way users can be better aware that these components can still trigger even if they receive no input.\n\n**Additional context**\n@ju-gu and I have run into this multiple times when building pipelines for clients. \n\n",
+  "base_commit": "4edefe3e56d1656298c3f9a767da2e5292551432",
+  "created_at": "2025-03-12T13:59:47+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.deepset-ai_1776_haystack-9027"
+}

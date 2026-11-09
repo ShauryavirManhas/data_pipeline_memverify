@@ -1,0 +1,9 @@
+{
+  "id": "matplotlib__matplotlib-29781",
+  "repo": "matplotlib/matplotlib",
+  "issue_text": "[Bug]: get_default_filename removes '0' from file name instead of '\\0' from window title\n### Bug summary\n\nremoved_chars = r'<>:\"/\\|?*\\0 ' in get_default_filename has r before string so escape char '\\' is ignored in the string, so it just replace regular zero character '0' with '_'\njust replace removed_chars = r'<>:\"/\\|?*\\0 ' with removed_chars = '<>:\"/\\\\|?*\\0 '\nhttps://github.com/matplotlib/matplotlib/blob/c887ecbc753763ff4232041cc84c9c6a44d20fd4/lib/matplotlib/backend_bases.py#L2223\n\n\n### Code for reproduction\n\n```Python\n# create a plot and set title to sth with 0 in it\nfig.canvas.set_window_title('120')\n# then click on save button\n```\n\n### Actual outcome\n\nIt shows save dialog with 12_.png file name\n\n### Expected outcome\n\nIt should show save dialog with 120.png file name\n\n### Additional information\n\n_No response_\n\n### Operating system\n\n_No response_\n\n### Matplotlib Version\n\nAll\n\n### Matplotlib Backend\n\nAll\n\n### Python version\n\nAll\n\n### Jupyter version\n\nAll\n\n### Installation\n\nNone\n",
+  "base_commit": "c887ecbc753763ff4232041cc84c9c6a44d20fd4",
+  "created_at": "2025-03-19T22:51:18+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.matplotlib_1776_matplotlib-29781"
+}

@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17967",
+  "repo": "conan-io/conan",
+  "issue_text": "[bug] using 'replace_requires' leads MSBuildDeps generator to include non-existent property sheet\n### Describe the bug\n\nI'm using component 'wt' with recipe from conan-center-index.\n'wt' requires 'sqlite3'.\nI'm building a component named 'sqlite3see' which is a drop-in replacement for 'sqlite3'.\nFor 'sqlite3see' I'm using the recipe from conan-center-index and changed only source code URL.\n\nMy profile for building 'wt' contains 'replace_requires'\n`[replace_requires]`\n`sqlite3/*: sqlite3see/[>3]`\n\nThis part works fine.\n\nNow I'm consuming 'wt' in my own component using MSBuild.\nI use same profile with 'replace_requires'.\nI use MSBuildDeps generator to get property sheets which I import into my project.\n\nThe bug is:\nGenerator created a property sheet named `conan_sqlite3see.props`.\nGenerator created a property sheet named `conan_wt.props`.\nThe property sheet for 'wt' wants to import a property sheet of `conan_sqlite3.props`.\nBut 'sqlite3' was redirected to 'sqlite3see'.\nSo there is no property sheet `conan_sqlite3.props`\n\nThis but was introduced in 2.12.\n\nThis bug is related to #17557\n\nRevisions of Conan prior to 2.12 generated different property sheets.\nProperty sheets for 'wt' did not include the property sheets of requirements.\n\n\n### How to reproduce it\n\nMaybe could be reproduced with other 'replace_requires' as well (e.g. 'zlib'->'zlig-ng').\n",
+  "base_commit": "f31a78f057c05c20482965cbdf21a79a9db04c45",
+  "created_at": "2025-03-15T15:29:55+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17967"
+}

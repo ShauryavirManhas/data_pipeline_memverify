@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17266",
+  "repo": "conan-io/conan",
+  "issue_text": "[question] Why do we skip 64/32 cross compilation with meson?\nSee https://github.com/conan-io/conan/blob/d35a73142a538808083f775ba3108664e1d50415/conan/tools/meson/toolchain.py#L159C2-L159C73\r\n\r\nWe are trying to cross build glib for linux x64->x86 (`arch=x86`) using the official conancenter recipe and the host profile\r\n```\r\n[settings]\r\nos=Linux\r\narch=x86\r\ncompiler=clang\r\ncompiler.version=14\r\ncompiler.libcxx=libstdc++11\r\nbuild_type=Debug\r\n```\r\n\r\n\r\nThis leads to the following error:\r\n`/usr/bin/ld: i386 architecture of input file '/conan/.conan/data/pcre2/10.42/_/_/package/9ff55d811dff94adb5ea6675dae30929f0465371/lib/libpcre2-8.a(pcre2_chartables.c.o)' is incompatible with i386:x86-64 output`\r\nsee [glib_error_logs.txt](https://github.com/user-attachments/files/17588545/glib_error_logs.txt)\r\n\r\nIt can be fixed by setting `tools.build.cross_building:cross_build=True`, however shouldn't this work out of the box without any special configuration?\n",
+  "base_commit": "dba212f7e335b931561d0a71152703226af85d8d",
+  "created_at": "2024-11-02T22:10:00+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17266"
+}

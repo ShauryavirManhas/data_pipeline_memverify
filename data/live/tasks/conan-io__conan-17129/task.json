@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17129",
+  "repo": "conan-io/conan",
+  "issue_text": "How to tell consumers to use specific generator?\n### What is your question?\n\nI have a package that requires certain generator to be used by consumers to work properly. How can I force consumers to use specific generator in addition to what they use in recipes?\n\n### Have you read the CONTRIBUTING guide?\n\n- [X] I've read the CONTRIBUTING guide\n",
+  "base_commit": "e25b357d6eab29fcb64ee04340f2d0d479ea09bf",
+  "created_at": "2024-10-08T11:01:07+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17129"
+}

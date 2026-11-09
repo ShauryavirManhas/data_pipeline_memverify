@@ -1,0 +1,9 @@
+{
+  "id": "streamlink__streamlink-6242",
+  "repo": "streamlink/streamlink",
+  "issue_text": "plugins.tv3cat: No plugin can handle URL: https://www.3cat.cat/3cat/directes/tv3/\n### Checklist\n\n- [x] This is a [plugin issue](https://streamlink.github.io/plugins.html) and not [a different kind of issue](https://github.com/streamlink/streamlink/issues/new/choose)\n- [x] [I have read the contribution guidelines](https://github.com/streamlink/streamlink/blob/master/CONTRIBUTING.md#contributing-to-streamlink)\n- [x] [I have checked the list of open and recently closed plugin issues](https://github.com/streamlink/streamlink/issues?q=is%3Aissue+label%3A%22plugin+issue%22)\n- [x] [I have checked the commit log of the master branch](https://github.com/streamlink/streamlink/commits/master)\n\n### Collaboration\n\n- [x] [I will provide feedback should a pull request be opened with a fix for the plugin](https://github.com/streamlink/streamlink/blob/master/CONTRIBUTING.md#pull-request-feedback)\n\n### Streamlink version\n\nLatest\n\n### Description\n\nF:\\cj_mix>streamlink https://www.3cat.cat/3cat/directes/tv3/\nerror: No plugin can handle URL: https://www.3cat.cat/3cat/directes/tv3/\nTV3 plugin is not working.\n\n### Debug log\n\nF:\\cj_mix>streamlink https://www.3cat.cat/3cat/directes/tv3/\nerror: No plugin can handle URL: https://www.3cat.cat/3cat/directes/tv3/\n",
+  "base_commit": "23a98cc5c543fd2456a189d794ff135008e50bf6",
+  "created_at": "2024-10-12T13:29:22+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.streamlink_1776_streamlink-6242"
+}

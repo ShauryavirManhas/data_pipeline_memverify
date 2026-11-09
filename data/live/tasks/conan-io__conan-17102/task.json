@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17102",
+  "repo": "conan-io/conan",
+  "issue_text": "[question] Profile information in merged build-order files\n### What is your question?\n\nHi!\r\nIn our workflow, we merge the two build-order JSON files for the Release and Debug profile and then go through the build-order hierarchy and build the packages by using the `build_args` flags from the according JSON entry for a `conan install` command.\r\nTwo questions on this procedure:\r\n\r\n1) Is the `conan install`command the correct (the intended) way of processing a build-order file?\r\n2) Is there a way to extract the profile information out of merged build-order files? I can only see, that the origin of a package is listed in the `filenames` entry, but from there I have to do some manual processing to retrieve the information, which profile to use for building that package.\n\n### Have you read the CONTRIBUTING guide?\n\n- [x] I've read the CONTRIBUTING guide\n",
+  "base_commit": "2e3f51782056b6665560f9af6166e30d7c2801ab",
+  "created_at": "2024-10-02T15:35:31+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17102"
+}

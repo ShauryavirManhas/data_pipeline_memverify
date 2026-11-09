@@ -1,0 +1,9 @@
+{
+  "id": "matplotlib__matplotlib-28933",
+  "repo": "matplotlib/matplotlib",
+  "issue_text": "[ENH]: AxLine xy1/xy2 setters should take xy as single parameters, (possibly) not separate ones\n### Problem\r\n\r\nCurrently, AxLine.set_xy1 and set_xy2 take x and y as separate parameters.  They should also take them as a single `xy` parameter, which is consistent with most other setters and would in particular allow the idiom `line.set(xy1=..., xy2=...)` (or `line.set(xy1=..., slope=...`).\r\n\r\n### Proposed solution\r\n\r\nGiven that the setters were only introduced only in Matplotlib 3.8, we could even consider just deprecating the split (x, y) form out and ultimately only supporting a single xy tuple (tagging this issue for 3.10 as we probably don't want to wait too long in that case); or we can support both forms with the standard dance present e.g. in Axes.set_xlim.\n",
+  "base_commit": "cf84d9a6410dec07f57916905c9f54bf00d22b2e",
+  "created_at": "2024-10-03T11:45:38+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.matplotlib_1776_matplotlib-28933"
+}

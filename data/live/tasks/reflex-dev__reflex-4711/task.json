@@ -1,0 +1,9 @@
+{
+  "id": "reflex-dev__reflex-4711",
+  "repo": "reflex-dev/reflex",
+  "issue_text": "[Enhancement] Async `cached_var` in the state\n## Motivations\r\n\r\n1. Cached vars are to ease the load on the system and reduce network calls\r\n2. Async calls are common in Python to load data from dependencies, like databases, caches, and config stores\r\n3. As of today, to load a data asynchronously and caching it in the state, it is required to develop a lot\r\n    - A synchronous getter\r\n    - A `loaded` state as `bool` to be alerted of the loading state\r\n    - A background task to load the data\r\n    - A `if/else` in the UI to wait for the data to be loaded\r\n\r\n## Example of expected usage\r\n\r\n```python\r\nclass MyState(rx.State):\r\n    user_id: str\r\n\r\n    @rx.cached_var\r\n    async def user(self) -> User | None:\r\n        return await db.load_user_by_id(self.user_id)\r\n```\r\n\r\n## Implementation\r\n\r\nUnder the hood, this could be achieved with a background task loading the data, the cached var returning `None` until it is loaded.\r\n\r\nOr, the async task can be wrapped by asyncio to be called synchronously from the app: `asyncio.get_event_loop().run_until_complete(func(...))`.\r\n\n",
+  "base_commit": "8663dbcb974bacc1e03d9f5158f62d7a98e398eb",
+  "created_at": "2025-01-29T09:36:47+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.reflex-dev_1776_reflex-4711"
+}

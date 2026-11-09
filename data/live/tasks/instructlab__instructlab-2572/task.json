@@ -1,0 +1,9 @@
+{
+  "id": "instructlab__instructlab-2572",
+  "repo": "instructlab/instructlab",
+  "issue_text": "add system profile auto detection based off RAM, vRAM, and system architecture\n\n",
+  "base_commit": "cd72f110dd6bff4a6b85e26637106d8b90746ccd",
+  "created_at": "2024-11-01T19:59:25+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.instructlab_1776_instructlab-2572"
+}

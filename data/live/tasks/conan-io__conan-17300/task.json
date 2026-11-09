@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17300",
+  "repo": "conan-io/conan",
+  "issue_text": "[feature] conan list is not ergonomic\n### Make `conan list` output all packages without requiring the \"*\"\r\n\r\nIntuitively, I want to be able to list my conan packages using `conan list`\r\n\r\n```\r\nC:\\Users\\pierr\\git\r\n\u03bb conan list\r\nERROR: Missing pattern or graph json file\r\n```\r\n\r\nI then have to go through the docs to find an example that tells me that I'm missing \"*\".\r\n\r\nWhy require the \"*\" argument? It's a small thing, but it's frustrating to the user, especially since Conan is close to Python, and we'd expect `conan list` to work like `pip list` does.\r\n\r\nSuggestion, make `conan list` behave like `conan list *`\r\n\r\n### Have you read the CONTRIBUTING guide?\r\n\r\n- [ ] I've read the CONTRIBUTING guide\n",
+  "base_commit": "7728bc9722a12c758b4cc2f39cf656a0497e5583",
+  "created_at": "2024-11-09T19:02:25+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17300"
+}

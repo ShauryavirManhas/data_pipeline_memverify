@@ -1,0 +1,9 @@
+{
+  "id": "conan-io__conan-17532",
+  "repo": "conan-io/conan",
+  "issue_text": "[bug] GnuToolchain's make_args does not handle empty values correctly\n### Describe the bug\r\n\r\nConan: 2.8.0\r\n\r\nWhen using the GnuToolchain generator in the following manner\r\n```python\r\ntc = GnuToolchain(self)\r\ntc.make_args[\"PREFIX\"] = \"\"\r\n...\r\ntc.generate()\r\n```\r\nwhere an empty string is passed as a value, the resulting `make` command fails with:\r\n```\r\nlibbpf/1.4.6: RUN: make PREFIX -j16\r\nmake: *** No rule to make target 'PREFIX'.  Stop.\r\n```\r\nExpected:\r\n```\r\nlibbpf/1.4.6: RUN: make PREFIX= -j16\r\n...\r\n```\r\n\r\nThe `make_args` and `configure_args` properties should always map `\"\"` and any other falsy values besides `None` to a `<key>=` command-line argument.\r\n\r\nAlso, the `make_args` should probably never create arguments without a `=` symbol altogether. Any `--xyz` flags to `make` seem better suited to the `args` keyword in `autotools.make(args=[...])`.\r\n\r\n### How to reproduce it\r\n\r\n_No response_\n",
+  "base_commit": "e9e4bb13e821470f28411742f1de179a796bc005",
+  "created_at": "2024-12-27T12:40:38+00:00",
+  "workdir": "/testbed",
+  "docker_image": "starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17532"
+}
