@@ -1,13 +1,16 @@
-"""mini-swe-agent wrapper for one local task checkout.
+"""mini-swe-agent wrapper for one task.
 
-Docker mode is a stub. The live model is LiteLLM; tests pass their own
-model and do not construct ``LitellmModel``. The cost limit uses token
-counts and the config prices. LiteLLM's ``agent.cost`` is only compared
-afterwards.
+``environment.kind: local`` copies the task workdir and runs there.
+``environment.kind: docker`` runs each command in a Modal sandbox of
+``Task.docker_image`` (see ``memverify.sandbox``). The live model is
+LiteLLM; tests pass their own model and do not construct ``LitellmModel``.
+The cost limit uses token counts and the config prices. LiteLLM's
+``agent.cost`` is only compared afterwards.
 """
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 import shutil
@@ -148,10 +151,26 @@ def run_task(
     complete: Complete | None = None,
     task_prompt: str | None = None,
     diagnose: bool = True,
+    sandbox: Any = None,
+    forbid_commits: list[str] | None = None,
 ) -> AgentResult:
-    """Copy the workdir, run the agent, and remove the copy."""
+    """Copy the workdir, run the agent, and remove the copy.
+
+    Docker mode runs in ``sandbox`` (or a new Modal sandbox) instead of a
+    local copy.
+    """
     if config.environment_kind == "docker":
-        return _docker_stub()
+        return _run_docker(
+            task,
+            task_path,
+            config,
+            model=model,
+            complete=complete,
+            task_prompt=task_prompt,
+            diagnose=diagnose,
+            sandbox=sandbox,
+            forbid_commits=forbid_commits,
+        )
     started = time.perf_counter()
     checkout = make_checkout(task, task_path)
     try:
@@ -179,9 +198,15 @@ def run_in_checkout(
     complete: Complete | None = None,
     task_prompt: str | None = None,
     diagnose: bool = True,
+    environment: Any = None,
+    collect: Callable[[str], tuple[str, list[str]]] | None = None,
 ) -> AgentResult:
-    """Run in an existing checkout. The caller owns that directory."""
-    if config.environment_kind == "docker":
+    """Run in an existing checkout. The caller owns that directory.
+
+    ``environment`` replaces the local shell. ``collect`` reads the patch
+    from that environment. Both are set together for a Modal sandbox.
+    """
+    if config.environment_kind == "docker" and environment is None:
         return _docker_stub()
     started = time.perf_counter()
     from minisweagent.agents.default import DefaultAgent
@@ -244,7 +269,7 @@ def run_in_checkout(
             if update_agent_cost:
                 self.cost = self.litellm_cost
 
-    env = _environment(checkout, config.timeout)
+    env = environment if environment is not None else _environment(checkout, config.timeout)
     system_template, instance_template = stock_templates()
     agent = PricedAgent(
         model if model is not None else build_litellm_model(config),
@@ -273,7 +298,10 @@ def run_in_checkout(
     else:
         status = str(info.get("exit_status") or "")
         error = None if status == "Submitted" else (status or "agent failed")
-    patch, touched = collect_patch(checkout, task.base_commit)
+    if collect is None:
+        patch, touched = collect_patch(checkout, task.base_commit)
+    else:
+        patch, touched = collect(task.base_commit)
     if diagnose and not model_call_failed:
         try:
             diagnosis, called, diagnosis_in, diagnosis_out, diagnosis_cost = _diagnose(
@@ -289,6 +317,14 @@ def run_in_checkout(
     else:
         diagnosis, called, diagnosis_in, diagnosis_out, diagnosis_cost = "", False, 0, 0, 0.0
     _warn_if_cost_disagrees(agent.litellm_cost, agent.priced_cost)
+    write_trace(
+        task.id,
+        {
+            "task_id": task.id,
+            "exit_status": str(info.get("exit_status") or ""),
+            "messages": agent.messages,
+        },
+    )
     return AgentResult(
         exit_status=str(info.get("exit_status") or ""),
         submission=str(info.get("submission") or ""),
@@ -309,15 +345,63 @@ def run_in_checkout(
     )
 
 
+def write_trace(task_id: str, payload: dict[str, Any]) -> None:
+    """Write the agent transcript when ``MEMVERIFY_TRACE_DIR`` is set.
+
+    The runner sets that directory. ``RunRecord`` is unchanged.
+    """
+    directory = os.environ.get("MEMVERIFY_TRACE_DIR", "").strip()
+    if not directory:
+        return
+    path = Path(directory)
+    path.mkdir(parents=True, exist_ok=True)
+    (path / f"{task_id}.json").write_text(
+        json.dumps(payload, default=str),
+        encoding="utf-8",
+    )
+
+
+def load_local_env() -> None:
+    """Load ``.env`` from the working directory. Existing variables win."""
+    path = Path.cwd() / ".env"
+    if not path.is_file():
+        return
+    for line in path.read_text(encoding="utf-8").splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#") or "=" not in stripped:
+            continue
+        key, value = stripped.split("=", 1)
+        key = key.strip()
+        value = value.strip().strip('"').strip("'")
+        if key and key not in os.environ:
+            os.environ[key] = value
+
+
+def completion_extras(api_base: str | None) -> dict[str, str]:
+    """OpenAI-compatible base URL and proxy token for a Modal endpoint.
+
+    An empty ``api_base`` means the model name's own provider, such as Fireworks.
+    """
+    if not api_base:
+        return {}
+    load_local_env()
+    token = os.environ.get("MODAL_PROXY_TOKEN", "")
+    if not token:
+        raise ModelCallFailed("MODAL_PROXY_TOKEN is not set. A Modal endpoint needs a proxy token in .env.")
+    return {"api_base": api_base, "api_key": token}
+
+
 def agent_litellm_kwargs(config: RunConfig) -> dict[str, Any]:
     """Arguments for ``LitellmModel``. Tests check these and do not construct the model."""
+    model_kwargs: dict[str, Any] = {
+        "temperature": config.agent.temperature,
+        "seed": config.seed,
+        "num_retries": config.num_retries,
+    }
+    model_kwargs.update(completion_extras(config.agent.api_base))
     return {
         "model_name": config.agent.model_name,
-        "model_kwargs": {
-            "temperature": config.agent.temperature,
-            "seed": config.seed,
-            "num_retries": config.num_retries,
-        },
+        "model_kwargs": model_kwargs,
         "cost_tracking": config.agent.cost_tracking,
     }
 
@@ -353,10 +437,17 @@ def litellm_complete(
     temperature: float,
     seed: int,
     num_retries: int = 3,
+    api_base: str | None = None,
+    api_key: str | None = None,
 ) -> tuple[str, int, int]:
     """One completion. Returns text, prompt tokens, completion tokens."""
     import litellm
 
+    extra: dict[str, Any] = {}
+    if api_base:
+        extra["api_base"] = api_base
+    if api_key:
+        extra["api_key"] = api_key
     try:
         response = litellm.completion(
             model=model,
@@ -364,6 +455,7 @@ def litellm_complete(
             temperature=temperature,
             seed=seed,
             num_retries=num_retries,
+            **extra,
         )
     except Exception as exc:
         raise ModelCallFailed(f"{type(exc).__name__}: {exc}") from exc
@@ -451,6 +543,7 @@ def _diagnose(
         temperature=config.agent.temperature,
         seed=config.seed,
         num_retries=config.num_retries,
+        **completion_extras(config.agent.api_base),
     )
     cost = usd(tokens_in, tokens_out, config.agent.price_in_per_1m, config.agent.price_out_per_1m)
     return text, True, tokens_in, tokens_out, cost
@@ -500,6 +593,68 @@ def _usage_int(usage: dict, *keys: str) -> int:
             continue
         return value
     return 0
+
+
+def _run_docker(
+    task: Task,
+    task_path: Path | str,
+    config: RunConfig,
+    *,
+    model: Any,
+    complete: Complete | None,
+    task_prompt: str | None,
+    diagnose: bool,
+    sandbox: Any,
+    forbid_commits: list[str] | None,
+) -> AgentResult:
+    """Run one task in a sandbox. ``task_path`` is unused; the image holds the repo."""
+    del task_path
+    started = time.perf_counter()
+    if sandbox is None and not task.docker_image:
+        return _failed_agent("docker mode requires Task.docker_image", started)
+    from memverify.sandbox import open_task_sandbox
+
+    box = None
+    try:
+        box = open_task_sandbox(task, config, sandbox, forbid_commits)
+        result = run_in_checkout(
+            Path(task.workdir or "/testbed"),
+            task,
+            config,
+            model=model,
+            complete=complete,
+            task_prompt=task_prompt,
+            diagnose=diagnose,
+            environment=box,
+            collect=box.collect_patch,
+        )
+        result.wall_seconds = time.perf_counter() - started
+        return result
+    except Exception as exc:
+        return _failed_agent(f"{type(exc).__name__}: {exc}", started)
+    finally:
+        if box is not None:
+            box.close()
+
+
+def _failed_agent(error: str, started: float) -> AgentResult:
+    return AgentResult(
+        exit_status="Error",
+        submission="",
+        patch="",
+        files_touched=[],
+        diagnosis="",
+        diagnosis_called=False,
+        agent_tokens_in=0,
+        agent_tokens_out=0,
+        diagnosis_tokens_in=0,
+        diagnosis_tokens_out=0,
+        cost_agent_usd=0.0,
+        cost_diagnosis_usd=0.0,
+        litellm_agent_cost=0.0,
+        error=error,
+        wall_seconds=time.perf_counter() - started,
+    )
 
 
 def _docker_stub() -> AgentResult:

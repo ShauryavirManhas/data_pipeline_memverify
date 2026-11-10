@@ -19,6 +19,7 @@ class AgentSettings:
     cost_limit: float
     wall_time_limit_seconds: int
     cost_tracking: str
+    api_base: str | None = None
 
 
 @dataclass(frozen=True)
@@ -31,6 +32,7 @@ class VerifierSettings:
     max_file_contents_chars: int
     write_prompt: str
     read_prompt: str
+    api_base: str | None = None
 
 
 @dataclass(frozen=True)
@@ -75,6 +77,7 @@ def load_config(path: Path | str) -> RunConfig:
             cost_limit=_require_price(agent, "agent.cost_limit"),
             wall_time_limit_seconds=_require_int(agent, "agent.wall_time_limit_seconds"),
             cost_tracking=tracking,
+            api_base=_optional_str(agent, "agent.api_base"),
         ),
         environment_kind=kind,
         timeout=_require_int(environment, "environment.timeout"),
@@ -87,6 +90,7 @@ def load_config(path: Path | str) -> RunConfig:
             max_file_contents_chars=_require_int(verifier, "verifier.max_file_contents_chars"),
             write_prompt=_require_str(verifier, "verifier.write_prompt"),
             read_prompt=_require_str(verifier, "verifier.read_prompt"),
+            api_base=_optional_str(verifier, "verifier.api_base"),
         ),
         diagnosis_prompt=_require_str(diagnosis, "diagnosis.prompt"),
         db_path=_require_str(memory, "memory.db_path"),
@@ -127,6 +131,17 @@ def _require_float(data: Mapping[str, Any], name: str) -> float:
     if isinstance(value, bool) or not isinstance(value, (int, float)):
         raise ValueError(f"missing price or setting: {name}")
     return float(value)
+
+
+def _optional_str(data: Mapping[str, Any], name: str) -> str | None:
+    """Missing or blank string settings stay unset."""
+    key = name.rsplit(".", 1)[-1]
+    if key not in data or data[key] in (None, ""):
+        return None
+    value = data[key]
+    if not isinstance(value, str):
+        raise ValueError(f"{name} must be a string")
+    return value
 
 
 def _optional_retries(data: Mapping[str, Any]) -> int:

@@ -40,38 +40,25 @@ def run_one(
     model: Any = None,
     complete: Complete | None = None,
     seed: int | None = None,
+    sandbox: Any = None,
+    sandbox_factory: Any = None,
+    forbid_commits: Sequence[str] | None = None,
 ) -> RunRecord:
     """Execute ``task`` and, when the policy says so, read or write ``store``.
 
     ``resolved`` stays null. A verifier rejection is a ``no`` on the record,
     not an ``error``. ``error`` is the agent failure, when there is one.
+
+    Docker mode uses ``sandbox`` when given, otherwise ``sandbox_factory``
+    or a Modal sandbox of ``Task.docker_image``. Policies still retrieve,
+    verify, and save. ``forbid_commits`` are later base commits that must
+    not remain reachable in the sandbox git history.
     """
     if policy not in POLICIES:
         raise ValueError(f"policy must be one of {', '.join(POLICIES)}")
     if seed is not None:
         config = replace(config, seed=seed)
     started = time.perf_counter()
-    if config.environment_kind == "docker":
-        agent = run_task(task, task_path, config, model=model, complete=complete, diagnose=False)
-        return _record(
-            task,
-            policy,
-            config,
-            agent_tokens_in=agent.agent_tokens_in,
-            agent_tokens_out=agent.agent_tokens_out,
-            diagnosis_tokens_in=0,
-            diagnosis_tokens_out=0,
-            cost_agent_usd=agent.cost_agent_usd,
-            cost_diagnosis_usd=0.0,
-            verifier=None,
-            hint_id=None,
-            hint_injected=False,
-            entry_saved=False,
-            patch=agent.patch,
-            wall_seconds=time.perf_counter() - started,
-            error=agent.error,
-        )
-
     hint_id: str | None = None
     hint_injected = False
     entry_saved = False
@@ -81,8 +68,19 @@ def run_one(
     cost_agent = cost_diagnosis = 0.0
     error: str | None = None
     checkout = None
+    box = None
+    prep: dict[str, Any] | None = None
     try:
-        checkout = make_checkout(task, task_path)
+        if config.environment_kind == "docker":
+            from memverify.sandbox import open_task_sandbox
+
+            box = open_task_sandbox(task, config, sandbox, list(forbid_commits or []), sandbox_factory)
+            read_file = box.read_file
+            contents_root = None
+        else:
+            checkout = make_checkout(task, task_path)
+            read_file = None
+            contents_root = checkout
         prompt = task.issue_text
         hint = store.retrieve(task) if reads_memory(policy) else None
         if hint is not None and policy == "read_check":
@@ -91,7 +89,7 @@ def run_one(
                 config,
                 issue_text=task.issue_text,
                 hint=hint,
-                file_contents=build_file_contents(checkout, hint, config),
+                file_contents=build_file_contents(contents_root, hint, config, read_file=read_file),
                 complete=complete,
             )
             if verdict.decision == "yes":
@@ -102,15 +100,28 @@ def run_one(
             hint_injected = True
             prompt = compose_prompt(task.issue_text, format_hint(hint, config.hint_prefix))
 
-        agent = run_in_checkout(
-            checkout,
-            task,
-            config,
-            model=model,
-            complete=complete,
-            task_prompt=prompt,
-            diagnose=policy != "none",
-        )
+        if box is not None:
+            agent = run_in_checkout(
+                Path(task.workdir or "/testbed"),
+                task,
+                config,
+                model=model,
+                complete=complete,
+                task_prompt=prompt,
+                diagnose=policy != "none",
+                environment=box,
+                collect=box.collect_patch,
+            )
+        else:
+            agent = run_in_checkout(
+                checkout,
+                task,
+                config,
+                model=model,
+                complete=complete,
+                task_prompt=prompt,
+                diagnose=policy != "none",
+            )
         patch = agent.patch
         agent_in = agent.agent_tokens_in
         agent_out = agent.agent_tokens_out
@@ -138,7 +149,12 @@ def run_one(
     finally:
         if checkout is not None:
             remove_checkout(checkout)
-    return _record(
+        if box is not None:
+            prep = dict(getattr(box, "prep", {}) or {})
+            prep["seconds"] = float(getattr(box, "seconds", 0.0) or 0.0)
+            prep["image"] = task.docker_image
+            box.close()
+    record = _record(
         task,
         policy,
         config,
@@ -156,6 +172,9 @@ def run_one(
         wall_seconds=time.perf_counter() - started,
         error=error,
     )
+    if prep is not None:
+        record.sandbox_prep = prep
+    return record
 
 
 def _entry(task: Task, agent: Any) -> MemoryEntry:

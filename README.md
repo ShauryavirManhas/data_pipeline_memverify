@@ -59,17 +59,15 @@ python -m unittest discover -s tests -v
 
 The tests use a fake model and a fake completion. They do not call Fireworks and they do not construct `LitellmModel`.
 
+## Real tasks
+
+`environment.kind: local` copies the task workdir. `environment.kind: docker` runs each shell command in a Modal sandbox of `Task.docker_image` (`memverify/sandbox.py`). The agent loop stays on the runner. Policies still retrieve, verify, and save. Before the first command the sandbox detaches at `base_commit` and deletes other git refs, so later commits in the image are not readable. A later task's base commit is allowed to remain when it is this task's commit or an ancestor of it. The agent sandbox has no outbound network, so it cannot download the task's pull request. The scorer's sandbox is separate and still has network. Transcripts land in `runs/<out>/traces/`. `configs/pilot.yaml` raises the mock-task step, timeout, and wall-clock limits for that path.
+
+`python -m memverify.runner` runs each stream and policy, scores with `score_record`, skips a finished prefix, and stops at `--spend-cap`. `--dry-run` prints the plan.
+
+`agent.step_limit` (25) and `environment.timeout` (30) in `configs/default.yaml` are for the mock tasks only.
+
 ## Known gaps
-
-Docker mode is a stub. `environment.kind: docker` does not start a container. `run_one` in `memverify/run.py` returns immediately with `error` set to `Docker mode is not implemented`, and it does not retrieve or save. The same string is built in `_docker_stub` in `memverify/agent.py`. Real tasks carry the image on `Task.docker_image`. There is no global image key.
-
-A real task image has to change these local-checkout assumptions:
-
-- `make_checkout` in `memverify/agent.py` copies the task workdir and checks out `base_commit` with local git. A container run has to start `Task.docker_image` and do that checkout inside it.
-- `collect_patch` and `_git` in `memverify/agent.py` read `git diff` from that local worktree. The diff has to be read from the container instead.
-- `build_file_contents` and `_read_repo_file` in `memverify/verifier.py` read files from the local worktree at `base_commit`, before the agent edits. Those reads have to happen in the container.
-
-`agent.step_limit` (25) and `environment.timeout` (30) in `configs/default.yaml` are for the mock tasks only. Real tasks need larger limits after a pilot. `agent.wall_time_limit_seconds` may need the same.
 
 `MemoryStore.retrieve` in `memverify/memory.py` keeps a candidate when the repo matches and `created_at` is strictly earlier. It does not check that the candidate's `base_commit` is an ancestor of the task's `base_commit`. That check is the optional tightening described in `SPEC.md`, once real checkouts have full git history.
 
