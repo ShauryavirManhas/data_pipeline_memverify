@@ -459,3 +459,75 @@ class ModalEnvParityTest(unittest.TestCase):
         self.assertEqual(env, self.IMAGE_ENV)
         self.assertIn("repository:starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17092:pull", calls[0])
         self.assertTrue(calls[1].endswith("starryzhang/sweb.eval.x86_64.conan-io_1776_conan-17092/manifests/latest"))
+
+
+class ModalStdinScriptTest(unittest.TestCase):
+    def test_long_script_is_written_to_stdin(self):
+        from unittest import mock
+
+        from memverify import scorer
+
+        script = "echo start\n" + ("y" * 300_000)
+        writes: list[bytes] = []
+        closed = {"eof": False}
+
+        class Stdin:
+            def write(self, data):
+                writes.append(bytes(data))
+
+            def write_eof(self):
+                closed["eof"] = True
+
+            def drain(self):
+                return None
+
+        class Proc:
+            stdin = Stdin()
+            returncode = 0
+
+            def wait(self):
+                return None
+
+            class _Stream:
+                def read(self):
+                    return "graded\n"
+
+            stdout = _Stream()
+            stderr = _Stream()
+
+        class Sandbox:
+            args: tuple = ()
+
+            def exec(self, *args, **kwargs):
+                Sandbox.args = args
+                return Proc()
+
+            def terminate(self):
+                return None
+
+        class FakeModal:
+            class Sandbox:
+                @staticmethod
+                def create(**kwargs):
+                    return Sandbox()
+
+            class Image:
+                @staticmethod
+                def from_registry(image):
+                    return image
+
+            class App:
+                @staticmethod
+                def lookup(*args, **kwargs):
+                    return object()
+
+        backend = scorer.ModalBackend(docker_env=False)
+        with mock.patch.dict(sys.modules, {"modal": FakeModal}):
+            result = backend.run("img:latest", script, 10)
+
+        self.assertEqual(Sandbox.args, ("bash", "-s"))
+        self.assertNotIn(b"y" * 1000, b" ".join(str(part).encode() for part in Sandbox.args))
+        self.assertGreater(len(writes), 1)
+        self.assertEqual(b"".join(writes), script.encode())
+        self.assertTrue(closed["eof"])
+        self.assertIn("graded", result.output)
