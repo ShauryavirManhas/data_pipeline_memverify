@@ -5,11 +5,13 @@ from __future__ import annotations
 import json
 import subprocess
 import tempfile
+import threading
+import time
 import unittest
 from pathlib import Path
 
 from memverify.agent import write_trace
-from memverify.sandbox import sandbox_create_kwargs, strip_future_history
+from memverify.sandbox import SandboxLost, sandbox_create_kwargs, strip_future_history, wait_for_process
 
 
 def _git(repo: Path, *args: str) -> str:
@@ -130,6 +132,69 @@ class AgentSandboxPolicyTest(unittest.TestCase):
                     os_environ["MEMVERIFY_TRACE_DIR"] = previous
             saved = json.loads((Path(tmp) / "task-a.json").read_text(encoding="utf-8"))
             self.assertEqual(saved["task_id"], "task-a")
+
+
+class _Proc:
+    def __init__(self, release: threading.Event | None = None) -> None:
+        self.release = release
+
+    def wait(self) -> int:
+        if self.release is not None:
+            self.release.wait()
+        return 0
+
+
+class WaitForProcessTest(unittest.TestCase):
+    def test_finished_command_returns(self) -> None:
+        wait_for_process(_Proc(), lambda: None, limit=5, poll_every=0.01)
+
+    def test_dead_sandbox_raises_without_waiting_out_the_timeout(self) -> None:
+        started = time.monotonic()
+        with self.assertRaises(SandboxLost):
+            wait_for_process(_Proc(threading.Event()), lambda: 137, limit=30, poll_every=0.01)
+        self.assertLess(time.monotonic() - started, 5)
+
+    def test_poll_error_does_not_hide_a_finished_command(self) -> None:
+        calls = {"n": 0}
+
+        def poll() -> int | None:
+            calls["n"] += 1
+            if calls["n"] == 1:
+                raise RuntimeError("temporary")
+            return None
+
+        release = threading.Event()
+
+        def finish() -> None:
+            time.sleep(0.05)
+            release.set()
+
+        threading.Thread(target=finish, daemon=True).start()
+        wait_for_process(_Proc(release), poll, limit=5, poll_every=0.01)
+
+    def test_blocking_poll_still_hits_the_deadline(self) -> None:
+        def poll() -> int | None:
+            time.sleep(30)
+            return None
+
+        started = time.monotonic()
+        with self.assertRaises(SandboxLost):
+            wait_for_process(
+                _Proc(threading.Event()),
+                poll,
+                limit=0,
+                poll_every=0.05,
+                grace=0.2,
+            )
+        self.assertLess(time.monotonic() - started, 2)
+
+    def test_sandbox_lost_from_poll_is_not_swallowed(self) -> None:
+        def poll() -> int | None:
+            raise SandboxLost("sandbox exited (1) while a command was running: spend limit")
+
+        with self.assertRaises(SandboxLost) as caught:
+            wait_for_process(_Proc(threading.Event()), poll, limit=30, poll_every=0.01)
+        self.assertIn("spend limit", str(caught.exception))
 
 
 if __name__ == "__main__":

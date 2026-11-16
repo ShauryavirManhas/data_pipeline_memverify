@@ -145,6 +145,10 @@ def run_one(
     except ModelCallFailed as exc:
         error = str(exc)
     except Exception as exc:
+        from memverify.sandbox import SandboxLost
+
+        if isinstance(exc, SandboxLost):
+            raise
         error = f"{type(exc).__name__}: {exc}"
     finally:
         if checkout is not None:

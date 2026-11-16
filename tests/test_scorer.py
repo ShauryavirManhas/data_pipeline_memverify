@@ -393,6 +393,30 @@ class ModalEnvParityTest(unittest.TestCase):
             out = subprocess.run(["bash", str(path)], env=self.MODAL_ENV, capture_output=True, text=True).stdout
         return dict(line.split("=", 1) for line in out.splitlines() if "=" in line)
 
+    def test_stdin_launch_reexecs_the_script_file(self):
+        """bash -s would re-exec the bash binary. The score command must not."""
+        from unittest import mock
+
+        from memverify import scorer
+
+        backend = scorer.ModalBackend()
+        with mock.patch.object(scorer, "image_env", return_value=self.IMAGE_ENV):
+            wrapped, mode = backend.wrap("ns/img:latest", "echo hello-from-score\n")
+        self.assertEqual(mode, "image")
+        direct = subprocess.run(["bash", "-s"], input=wrapped, capture_output=True, text=True, env=self.MODAL_ENV)
+        self.assertIn("cannot execute binary file", direct.stderr)
+        with tempfile.TemporaryDirectory() as directory:
+            script_path = str(Path(directory) / "score.sh")
+            launched = subprocess.run(
+                ["bash", "-c", scorer.modal_score_command(script_path)],
+                input=wrapped,
+                capture_output=True,
+                text=True,
+                env=self.MODAL_ENV,
+            )
+        self.assertEqual(launched.returncode, 0, launched.stderr)
+        self.assertIn("hello-from-score", launched.stdout)
+
     def test_image_env_mode_matches_docker(self):
         from unittest import mock
 
@@ -525,7 +549,7 @@ class ModalStdinScriptTest(unittest.TestCase):
         with mock.patch.dict(sys.modules, {"modal": FakeModal}):
             result = backend.run("img:latest", script, 10)
 
-        self.assertEqual(Sandbox.args, ("bash", "-s"))
+        self.assertEqual(Sandbox.args, ("bash", "-c", scorer.modal_score_command()))
         self.assertNotIn(b"y" * 1000, b" ".join(str(part).encode() for part in Sandbox.args))
         self.assertGreater(len(writes), 1)
         self.assertEqual(b"".join(writes), script.encode())

@@ -287,6 +287,10 @@ def run_in_checkout(
     try:
         info = agent.run(prompt)
     except Exception as exc:
+        from memverify.sandbox import SandboxLost
+
+        if isinstance(exc, SandboxLost):
+            raise
         last = agent.messages[-1] if agent.messages else {}
         extra = last.get("extra") or {}
         info = {
@@ -631,6 +635,10 @@ def _run_docker(
         result.wall_seconds = time.perf_counter() - started
         return result
     except Exception as exc:
+        from memverify.sandbox import SandboxLost
+
+        if isinstance(exc, SandboxLost):
+            raise
         return _failed_agent(f"{type(exc).__name__}: {exc}", started)
     finally:
         if box is not None:

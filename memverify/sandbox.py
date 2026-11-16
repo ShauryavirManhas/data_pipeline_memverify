@@ -18,6 +18,7 @@ The scorer uses its own sandbox and is not affected.
 from __future__ import annotations
 
 import shlex
+import threading
 import time
 from typing import Any, Callable
 
@@ -26,6 +27,77 @@ from memverify.types import Task
 
 ShellResult = dict[str, Any]
 Runner = Callable[..., ShellResult]
+
+
+class SandboxLost(RuntimeError):
+    """The sandbox exited while a command was still running."""
+
+
+def _poll_once(poll: Callable[[], int | None], timeout: float) -> tuple[str, Any]:
+    """Run ``poll`` without letting it block the command deadline.
+
+    Modal's client uses one event loop. A stuck ``exec`` wait can keep
+    ``poll`` from returning, and the deadline check used to sit behind that call.
+    """
+    box: dict[str, Any] = {}
+
+    def _run() -> None:
+        try:
+            box["code"] = poll()
+        except BaseException as exc:
+            box["error"] = exc
+
+    thread = threading.Thread(target=_run, daemon=True)
+    thread.start()
+    thread.join(timeout)
+    if thread.is_alive():
+        return "timeout", None
+    if "error" in box:
+        return "error", box["error"]
+    return "ok", box.get("code")
+
+
+def wait_for_process(
+    proc: Any,
+    poll: Callable[[], int | None],
+    limit: int,
+    *,
+    poll_every: float = 5.0,
+    grace: float = 15.0,
+) -> None:
+    """Wait for ``proc`` unless ``poll`` reports that the sandbox has exited.
+
+    Modal retries a lost exec until the command deadline. A dead sandbox
+    would otherwise block the agent for that whole timeout, and the wait
+    would be saved as if the agent had used the time.
+    """
+    done = threading.Event()
+    error: list[BaseException] = []
+
+    def _wait() -> None:
+        try:
+            proc.wait()
+        except BaseException as exc:
+            error.append(exc)
+        finally:
+            done.set()
+
+    threading.Thread(target=_wait, daemon=True).start()
+    deadline = time.monotonic() + max(limit, 0) + grace
+    while not done.wait(poll_every):
+        if time.monotonic() >= deadline:
+            raise SandboxLost(
+                f"command was still running after {limit}s and the sandbox never returned it"
+            )
+        kind, value = _poll_once(poll, poll_every)
+        if kind == "error":
+            if isinstance(value, SandboxLost):
+                raise value
+            continue
+        if kind == "ok" and value is not None:
+            raise SandboxLost(f"sandbox exited ({value}) while a command was running")
+    if error:
+        raise error[0]
 
 _SUBMIT = "COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT"
 
@@ -94,7 +166,12 @@ git clean -fd
 git for-each-ref --format='%(refname)' refs/heads refs/tags refs/remotes | while read -r ref; do
   git update-ref -d "$ref" || true
 done
-rm -f .git/ORIG_HEAD .git/FETCH_HEAD .git/MERGE_HEAD .git/CHERRY_PICK_HEAD
+rm -f .git/ORIG_HEAD .git/FETCH_HEAD .git/MERGE_HEAD .git/CHERRY_PICK_HEAD .git/refs/remotes/origin/HEAD
+# A dangling remotes/origin/HEAD makes git gc abort, and later commits stay readable.
+if [ -f .git/packed-refs ]; then
+  grep -v 'refs/remotes/origin/HEAD' .git/packed-refs > .git/packed-refs.memverify || true
+  mv .git/packed-refs.memverify .git/packed-refs
+fi
 git reflog expire --expire=now --all
 git gc --prune=now --quiet
 """
@@ -111,7 +188,8 @@ def strip_future_history(run: Runner, base_commit: str, forbid: list[str], workd
     when any other forbidden commit remains or the prep script failed, and
     None when nothing was forbidden.
     """
-    result = run(history_script(base_commit, workdir), timeout=180)
+    # Large repos need more than three minutes to repack after the refs are deleted.
+    result = run(history_script(base_commit, workdir), timeout=600)
     probes: dict[str, bool] = {}
     kept_ancestors: list[str] = []
     for sha in forbid:
@@ -310,6 +388,16 @@ class ModalCommandSandbox(ShellEnvironment):
             return ["env", "-i", *self._env_assignments, "bash", "-lc", inner]
         return ["bash", "-lc", self._strip_prefix + "\n" + inner]
 
+    def _poll_sandbox(self) -> int | None:
+        code = self._sandbox.poll()
+        if code is None:
+            return None
+        result = getattr(getattr(self._sandbox, "_impl", None), "result", None)
+        detail = getattr(result, "exception", "") if result is not None else ""
+        if detail:
+            raise SandboxLost(f"sandbox exited ({code}) while a command was running: {detail[:400]}")
+        return code
+
     def _run_shell(self, command: str, timeout: int | None = None) -> ShellResult:
         if not self.is_open or self._sandbox is None:
             raise RuntimeError("sandbox is not open")
@@ -317,11 +405,14 @@ class ModalCommandSandbox(ShellEnvironment):
         started = time.perf_counter()
         try:
             proc = self._sandbox.exec(*self._argv(command), timeout=limit)
-            proc.wait()
+            wait_for_process(proc, self._poll_sandbox, limit)
             stdout = proc.stdout.read() or ""
             stderr = proc.stderr.read() or ""
             code = 0 if proc.returncode is None else int(proc.returncode)
             return {"output": stdout + stderr, "returncode": code, "exception_info": ""}
+        except SandboxLost:
+            self.is_open = False
+            raise
         except Exception as exc:
             return {
                 "output": "",

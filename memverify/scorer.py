@@ -360,6 +360,19 @@ MODAL_ADDED_ENV: dict[str, str | None] = {
 
 
 _MODAL_STDIN_CHUNK = 256 * 1024
+_MODAL_SCORE_SCRIPT = "/tmp/memverify_score.sh"
+
+
+def modal_score_command(script_path: str = _MODAL_SCORE_SCRIPT) -> str:
+    """Shell command that runs a score script fed on stdin.
+
+    ``bash -s`` sets ``$0`` to ``bash``. The Docker-env prefix then
+    re-execs ``$0``, and bash tries to run its own binary as a script
+    (``cannot execute binary file``). Writing the script to a file makes
+    ``$0`` that file, which is what the prefix expects.
+    """
+    quoted = shlex.quote(script_path)
+    return f"cat >{quoted} && bash {quoted}"
 
 
 def _write_exec_stdin(proc: Any, script: str) -> None:
@@ -505,8 +518,9 @@ class ModalBackend:
             start = time.monotonic()
             # Modal rejects an exec whose arguments exceed 64KiB. The script
             # holds the base64 patch, so a long patch used to die here with
-            # resolved left null.
-            proc = sandbox.exec("bash", "-s")
+            # resolved left null. Stdin avoids that limit. The command writes
+            # the script to a file before running it: see modal_score_command.
+            proc = sandbox.exec("bash", "-c", modal_score_command())
             _write_exec_stdin(proc, script)
             proc.wait()
             output = proc.stdout.read() + proc.stderr.read()

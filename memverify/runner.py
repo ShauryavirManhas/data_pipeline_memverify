@@ -18,6 +18,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from collections.abc import Callable, Sequence
 from concurrent.futures import ProcessPoolExecutor
 from dataclasses import dataclass, replace
@@ -32,6 +33,7 @@ from memverify.types import POLICIES, RunRecord, Task, load_task
 # Shaurya's go/no-go rate: about $0.95/hour at 4 cores and 16 GB.
 USD_PER_HOUR_AT_4CPU_16GB = 0.95
 SCORE_ATTEMPTS = 3
+SANDBOX_LOST_TRIES = 3
 
 
 class SpendCapExceeded(Exception):
@@ -150,9 +152,20 @@ class SpendLedger:
             self.path.write_text(json.dumps({"usd": 0.0, "events": []}), encoding="utf-8")
 
     def total(self) -> float:
+        """Read the total under the same lock ``add`` uses.
+
+        Two runners share this file. An unlocked read can land in the middle
+        of a rewrite and raise ``JSONDecodeError``, which kills that seed.
+        """
+        import fcntl
+
         if not self.path.is_file():
             return 0.0
-        return float(json.loads(self.path.read_text(encoding="utf-8")).get("usd") or 0.0)
+        with self.path.open("a+", encoding="utf-8") as handle:
+            fcntl.flock(handle, fcntl.LOCK_SH)
+            handle.seek(0)
+            raw = handle.read() or '{"usd": 0.0, "events": []}'
+            return float(json.loads(raw).get("usd") or 0.0)
 
     def exceeded(self) -> bool:
         return self.total() >= self.cap
@@ -258,15 +271,36 @@ def execute_stream(
             if ledger.exceeded():
                 return "capped"
             index = start + offset
-            record = run_one_fn(
-                task,
-                path,
-                config,
-                policy,
-                store,
-                seed,
-                bases[index + 1 :],
-            )
+            record = None
+            for attempt in range(1, SANDBOX_LOST_TRIES + 1):
+                try:
+                    record = run_one_fn(
+                        task,
+                        path,
+                        config,
+                        policy,
+                        store,
+                        seed,
+                        bases[index + 1 :],
+                    )
+                    break
+                except Exception as exc:
+                    from memverify.sandbox import SandboxLost
+
+                    if not isinstance(exc, SandboxLost):
+                        raise
+                    print(
+                        f"{task.id} {policy}: sandbox lost ({attempt}/{SANDBOX_LOST_TRIES}): {exc}",
+                        file=sys.stderr,
+                        flush=True,
+                    )
+                    text = str(exc).lower()
+                    if "spend limit" in text or "billing cycle" in text:
+                        return "capped"
+                    if attempt == SANDBOX_LOST_TRIES:
+                        raise
+                    time.sleep(5)
+            assert record is not None
             prep = getattr(record, "sandbox_prep", None)
             details = None
             attempts = 0

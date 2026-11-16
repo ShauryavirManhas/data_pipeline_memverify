@@ -8,7 +8,7 @@ seed: 0
 num_retries: 3
 agent:
   model_name: openai/nvidia/GLM-5.3-Flash-NVFP4
-  api_base: https://sumreenf--ep-memverify-server.us-west.modal.direct/v1
+  api_base: https://drathis--ep-memverify-server.us-west.modal.direct/v1
   price_in_per_1m: 0.15
   price_out_per_1m: 0.50
   temperature: 0.0
@@ -21,7 +21,7 @@ environment:
   timeout: 600
 verifier:
   model_name: openai/nvidia/GLM-5.3-Flash-NVFP4
-  api_base: https://sumreenf--ep-memverify-server.us-west.modal.direct/v1
+  api_base: https://drathis--ep-memverify-server.us-west.modal.direct/v1
   price_in_per_1m: 0.15
   price_out_per_1m: 0.50
   temperature: 0.0
