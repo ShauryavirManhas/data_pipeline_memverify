@@ -156,7 +156,7 @@ class LocalAgentTest(unittest.TestCase):
         self.assertEqual(result.diagnosis, "")
         self.assertEqual(result.cost_diagnosis_usd, 0.0)
 
-    def test_docker_mode_does_not_start_a_container(self):
+    def test_docker_mode_requires_an_image_before_calling_the_model(self):
         task = load_task(TASK_PATH)
         config = replace(_config(), environment_kind="docker")
 
@@ -165,7 +165,7 @@ class LocalAgentTest(unittest.TestCase):
                 raise AssertionError("docker mode must not query a model")
 
         result = run_task(task, TASK_PATH, config, model=Boom())
-        self.assertEqual(result.error, "Docker mode is not implemented")
+        self.assertEqual(result.error, "docker mode requires Task.docker_image")
         self.assertEqual(result.patch, "")
         self.assertFalse(result.diagnosis_called)
 

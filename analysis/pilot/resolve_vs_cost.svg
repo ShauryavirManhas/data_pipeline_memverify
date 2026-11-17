@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420">
+<rect width="100%" height="100%" fill="white"/>
+<line x1="70" y1="50" x2="70" y2="390" stroke="#222"/>
+<line x1="70" y1="390" x2="610" y2="390" stroke="#222"/>
+<text x="340.0" y="408" text-anchor="middle" font-size="13">mean cost per task (USD)</text>
+<text x="18" y="220.0" font-size="13" transform="rotate(-90 18 220.0)">resolve rate</text>
+<circle cx="448.0" cy="298.5" r="5" fill="#1f4b99"/>
+<text x="456.0" y="298.5" font-size="12">none</text>
+<circle cx="472.0" cy="324.6" r="5" fill="#1f4b99"/>
+<text x="480.0" y="324.6" font-size="12">memory_no_check</text>
+<circle cx="502.0" cy="324.6" r="5" fill="#1f4b99"/>
+<text x="510.0" y="324.6" font-size="12">write_check</text>
+<circle cx="427.6" cy="285.4" r="5" fill="#1f4b99"/>
+<text x="435.6" y="285.4" font-size="12">read_check</text>
+</svg>

@@ -6,3 +6,5 @@ unidiff>=0.7
 datasets>=2.19
 # the local end-to-end scorer tests run a real pytest suite
 pytest>=7
+# Modal sandboxes for scoring and for the agent's shell (Sumreen)
+modal>=0.64

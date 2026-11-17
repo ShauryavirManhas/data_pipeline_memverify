@@ -10,7 +10,7 @@ agent:
   wall_time_limit_seconds: 300
   cost_tracking: ignore_errors
 environment:
-  kind: local              # local | docker (docker is a stub)
+  kind: local              # local | docker (docker runs commands in a Modal sandbox)
   timeout: 30              # mock task only. Real tasks need larger limits, set after the pilot.
 verifier:
   model_name: fireworks_ai/accounts/fireworks/models/gpt-oss-20b

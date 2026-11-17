@@ -344,5 +344,76 @@ class CliTest(unittest.TestCase):
             self.assertIn("policy", stderr.getvalue())
 
 
+class DockerPolicyTest(unittest.TestCase):
+    def test_read_check_reads_the_sandbox_before_the_agent_runs(self):
+        from memverify.sandbox import ShellEnvironment
+
+        class Fake(ShellEnvironment):
+            def __init__(self):
+                super().__init__()
+                self.is_open = True
+                self.seconds = 1.5
+                self.prep = {"future_commits_absent": True}
+                self.events: list[tuple[str, str]] = []
+                self.closed = False
+
+            def _run_shell(self, command, timeout=None):
+                self.events.append(("exec", command))
+                if "COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT" in command:
+                    return {
+                        "output": "COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT\n",
+                        "returncode": 0,
+                        "exception_info": "",
+                    }
+                return {"output": "", "returncode": 0, "exception_info": ""}
+
+            def read_file(self, rel):
+                self.events.append(("read", rel))
+                return "def mean(values):\n    return 1\n"
+
+            def collect_patch(self, base_commit):
+                return "diff --git a/mean.py b/mean.py\n", ["mean.py"]
+
+            def close(self):
+                self.closed = True
+                self.is_open = False
+
+        cfg = replace(_config(), environment_kind="docker")
+        task = load_task(TASK_PATH)
+        box = Fake()
+        with tempfile.TemporaryDirectory() as tmp:
+            store = MemoryStore(Path(tmp) / "stream.sqlite")
+            store.add(_entry("rare", "2024-05-01T00:00:00+00:00", task.issue_text))
+
+            def complete(**kwargs):
+                if kwargs["model"] == cfg.verifier.model_name:
+                    return '{"decision": "yes", "reason": "same bug"}', 2, 2
+                return "diagnosis", 1, 1
+
+            model = _empty_model(cfg)
+            record = run_one(
+                task,
+                TASK_PATH,
+                cfg,
+                "read_check",
+                store,
+                model=model,
+                complete=complete,
+                sandbox=box,
+            )
+            store.close()
+        self.assertIsNone(record.error)
+        self.assertEqual(record.hint_id, "rare")
+        self.assertTrue(record.hint_injected)
+        self.assertTrue(record.entry_saved)
+        self.assertEqual(record.verifier_decision, "yes")
+        self.assertEqual(box.events[0][0], "read")
+        self.assertTrue(any(kind == "exec" for kind, _command in box.events))
+        self.assertIn(cfg.hint_prefix, "\n".join(model.prompts))
+        self.assertTrue(box.closed)
+        self.assertEqual(record.sandbox_prep["future_commits_absent"], True)
+        self.assertEqual(record.sandbox_prep["seconds"], 1.5)
+
+
 if __name__ == "__main__":
     unittest.main()

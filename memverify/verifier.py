@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Callable
 from dataclasses import dataclass
 from pathlib import Path
 
-from memverify.agent import Complete, call_model, litellm_complete
+from memverify.agent import Complete, call_model, completion_extras, litellm_complete
 from memverify.config import RunConfig, usd
 from memverify.types import MemoryEntry
 
@@ -78,17 +79,24 @@ def parse_verifier_output(text: str) -> tuple[str, str]:
     return decision, reason
 
 
-def build_file_contents(checkout: Path, hint: MemoryEntry, config: RunConfig) -> str:
+def build_file_contents(
+    checkout: Path | None,
+    hint: MemoryEntry,
+    config: RunConfig,
+    *,
+    read_file: Callable[[str], str | None] | None = None,
+) -> str:
     """Windows of about 60 lines around remembered hunks, with a prefix fallback.
 
     Line numbers come from the remembered patch and may have shifted in
     ``checkout``. Each file is capped, then the joined text is capped.
+    ``read_file`` reads from a sandbox when there is no local checkout.
     """
     hunks = hunks_by_file(hint.patch)
     sections = []
     per_file = config.verifier.max_file_chars
     for rel in hint.files_touched:
-        text = _file_text(checkout, rel, hunks)
+        text = _file_text(checkout, rel, hunks, read_file=read_file)
         sections.append(f"----- {rel} -----\n{truncate(text, per_file)}\n")
     return truncate("".join(sections), config.verifier.max_file_contents_chars)
 
@@ -150,6 +158,7 @@ def _call(config: RunConfig, prompt: str, complete: Complete | None) -> Verifier
         temperature=config.verifier.temperature,
         seed=config.seed,
         num_retries=config.num_retries,
+        **completion_extras(config.verifier.api_base),
     )
     decision, reason = parse_verifier_output(text)
     cost = usd(
@@ -172,11 +181,18 @@ def _strip_one_fence(text: str) -> str:
 
 
 def _file_text(
-    checkout: Path,
+    checkout: Path | None,
     rel: str,
     hunks: dict[str, list[tuple[int, int]]] | None,
+    *,
+    read_file: Callable[[str], str | None] | None = None,
 ) -> str:
-    raw = _read_repo_file(checkout, rel)
+    if read_file is not None:
+        raw = read_file(rel)
+    elif checkout is None:
+        raw = None
+    else:
+        raw = _read_repo_file(checkout, rel)
     if raw is None:
         return "<file not present>"
     file_hunks = None if hunks is None else hunks.get(rel)

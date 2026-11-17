@@ -359,6 +359,33 @@ MODAL_ADDED_ENV: dict[str, str | None] = {
 }
 
 
+_MODAL_STDIN_CHUNK = 256 * 1024
+_MODAL_SCORE_SCRIPT = "/tmp/memverify_score.sh"
+
+
+def modal_score_command(script_path: str = _MODAL_SCORE_SCRIPT) -> str:
+    """Shell command that runs a score script fed on stdin.
+
+    ``bash -s`` sets ``$0`` to ``bash``. The Docker-env prefix then
+    re-execs ``$0``, and bash tries to run its own binary as a script
+    (``cannot execute binary file``). Writing the script to a file makes
+    ``$0`` that file, which is what the prefix expects.
+    """
+    quoted = shlex.quote(script_path)
+    return f"cat >{quoted} && bash {quoted}"
+
+
+def _write_exec_stdin(proc: Any, script: str) -> None:
+    """Feed ``script`` to ``bash -s`` in chunks small enough to drain."""
+    payload = script.encode("utf-8")
+    view = memoryview(payload)
+    for start in range(0, len(view), _MODAL_STDIN_CHUNK):
+        proc.stdin.write(view[start : start + _MODAL_STDIN_CHUNK])
+        proc.stdin.drain()
+    proc.stdin.write_eof()
+    proc.stdin.drain()
+
+
 def _registry_get(url: str, token: str | None, accept: str | None = None):
     import urllib.request
 
@@ -489,8 +516,12 @@ class ModalBackend:
         pull_seconds = time.monotonic() - start
         try:
             start = time.monotonic()
-            encoded = base64.b64encode(script.encode("utf-8")).decode("ascii")
-            proc = sandbox.exec("bash", "-c", f"echo '{encoded}' | base64 -d > /tmp/memverify_score.sh && bash /tmp/memverify_score.sh")
+            # Modal rejects an exec whose arguments exceed 64KiB. The script
+            # holds the base64 patch, so a long patch used to die here with
+            # resolved left null. Stdin avoids that limit. The command writes
+            # the script to a file before running it: see modal_score_command.
+            proc = sandbox.exec("bash", "-c", modal_score_command())
+            _write_exec_stdin(proc, script)
             proc.wait()
             output = proc.stdout.read() + proc.stderr.read()
             return BackendResult(output, proc.returncode or 0, pull_seconds, time.monotonic() - start, where=f"modal (env: {env_mode})")
