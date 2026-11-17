@@ -4,7 +4,7 @@ The corrected full run is finished. No further agent run is needed for this scal
 
 ## Where the logs are
 
-`runs/full` is gitignored. `git pull` will not bring it. Copy the directory. It has 104 logs (`{repo}__{policy}__s{seed}.jsonl`), the sqlite memory files, `spend.json`, score logs, and traces. Do not mix in `runs/pilot`, `runs/one`, or the `runs/full-backup-*` directories.
+`runs/full` is gitignored. `git pull` will not bring it. Sumreen will share that folder directly. It has 104 logs (`{repo}__{policy}__s{seed}.jsonl`), the sqlite memory files, `spend.json`, score logs, and traces. Do not mix in `runs/pilot`, `runs/one`, or the `runs/full-backup-*` directories.
 
 `data/live/instances.jsonl` is also gitignored. The scorer needs that local file. It must not be mounted into the agent sandbox.
 
